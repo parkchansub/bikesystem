@@ -1,5 +1,6 @@
 package com.example.bikesystem.api.controller;
 
+import com.example.bikesystem.dto.LocationsResponseDTO;
 import com.example.bikesystem.dto.RentBikeRequestDTO;
 import com.example.bikesystem.dto.SystemStartResponseDTO;
 import com.example.bikesystem.item.Bike;
@@ -40,40 +41,8 @@ import java.util.Map;
  * Start API
  * 문제를 풀기 위한 key를 발급한다. Start API를 실행하면 파라미터로 전달한 문제 번호에 맞게 각 자전거 대여소 및 트럭에 대한 정보를 초기화한다.
  *
- * Request
- * POST /start
- * X-Auth-Token: {X-Auth-Token}
- * Content-Type: application/json
- * Header
  *
- * Name	Description
- * X-Auth-Token	문제에서 발급되는 응시자 식별 토큰 값
- * Parameter
  *
- * Name	Type	Description
- * problem	Integer	시나리오 번호 (1 <= problem <= 2)
- * Example
- *
- * curl -X POST {BASE_URL}/start \
- *      -H 'X-Auth-Token: {X_AUTH_TOKEN}' \
- *      -H 'Content-Type: application/json' \
- *      -d '{
- *          "problem": 1
- *      }'
- * Response
- * Key
- *
- * Key	Type	Description
- * auth_key	String	Start API 를 통해 발급받은 key, 이후 문제 풀이에 진행되는 모든 API에 이 key를 사용
- * problem	Integer	선택한 시나리오 번호
- * time	Integer	현재 카카오 T 바이크 서비스에서의 시각 (0부터 시작)
- * Example
- *
- * {
- *   "auth_key": "1fd74321-d314-4885-b5ae-3e72126e75cc",
- *   "problem": 1,
- *   "time": 0
- * }
  * Locations API
  * 현재 카카오 T 바이크 서비스 시각에 각 자전거 대여소가 보유한 자전거 수를 반환한다.
  *
@@ -108,11 +77,52 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/bikesystem")
 public class BikeSystemController {
 
     private final BikeSystemService bikeSystemService;
 
 
+    /**
+     * Request
+     * POST /start
+     * X-Auth-Token: {X-Auth-Token}
+     * Content-Type: application/json
+     * Header
+     *
+     * Name	Description
+     * X-Auth-Token	문제에서 발급되는 응시자 식별 토큰 값
+     * Parameter
+     *
+     * Name	Type	Description
+     * problem	Integer	시나리오 번호 (1 <= problem <= 2)
+     * Example
+     *
+     * curl -X POST {BASE_URL}/start \
+     *      -H 'X-Auth-Token: {X_AUTH_TOKEN}' \
+     *      -H 'Content-Type: application/json' \
+     *      -d '{
+     *          "problem": 1
+     *      }'
+     * Response
+     * Key
+     *
+     * Key	Type	Description
+     * auth_key	String	Start API 를 통해 발급받은 key, 이후 문제 풀이에 진행되는 모든 API에 이 key를 사용
+     * problem	Integer	선택한 시나리오 번호
+     * time	Integer	현재 카카오 T 바이크 서비스에서의 시각 (0부터 시작)
+     * Example
+     *
+     * {
+     *   "auth_key": "1fd74321-d314-4885-b5ae-3e72126e75cc",
+     *   "problem": 1,
+     *   "time": 0
+     * }
+     * @param reqDto
+     * @param request
+     * @param response
+     * @return
+     */
     @PostMapping("/start")
     public SystemStartResponseDTO startBikeSystem(@RequestBody Map<String,String> reqDto, HttpServletRequest request, HttpServletResponse response){
         String problem = reqDto.get("problem");
@@ -120,7 +130,49 @@ public class BikeSystemController {
     }
 
 
-    @GetMapping("/api/bike/rent")
+    /**
+     * Locations API
+     * 현재 카카오 T 바이크 서비스 시각에 각 자전거 대여소가 보유한 자전거 수를 반환한다.
+     * <p>
+     * Request
+     * GET /locations
+     * Authorization: {auth_key}
+     * Content-Type: application/json
+     * Header
+     * <p>
+     * Name	Description
+     * Authorization	Start API 에서 발급받은 auth_key
+     * Example
+     * <p>
+     * curl -X GET {BASE_URL}/locations \
+     * -H 'Authorization: {AUTH_KEY}' \
+     * -H 'Content-Type: application/json'
+     * Response
+     * Key
+     * <p>
+     * Key	Type	Description
+     * locations	Array of Location	각 자전거 대여소의 ID, 보유하고 있는 자전거 수에 대한 정보를 담은 배열
+     * Example
+     * <p>
+     * {
+     * "locations": [
+     * { "id": 0, "located_bikes_count": 3 },
+     * { "id": 1, "located_bikes_count": 3 },
+     * ...
+     * ]
+     */
+
+    @GetMapping("/locations")
+    public LocationsResponseDTO getLocationInfo(@RequestBody Map<String,String> reqDto, HttpServletRequest request, HttpServletResponse response){
+        String authorization = reqDto.get("Authorization");
+
+        LocationsResponseDTO locationInfo = bikeSystemService.getLocationInfo(authorization);
+
+        return locationInfo;
+    }
+
+
+    @GetMapping("/rentbike")
     public Bike requestRentBike(@RequestBody RentBikeRequestDTO rentBikeRequestDTO, HttpServletRequest request, HttpServletResponse response){
         return bikeSystemService.rentBike(rentBikeRequestDTO);
     }

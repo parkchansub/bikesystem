@@ -7,6 +7,7 @@ import java.util.UUID;
 public class RentOffice {
 
     private String id;
+    private int seq;
     private List<Bike> holdBikeList;
 
     private int xPosition;
@@ -17,9 +18,10 @@ public class RentOffice {
     }
 
 
-    public RentOffice(List<Bike> bikes, int xPosition, int yPosition) {
+    public RentOffice(List<Bike> bikes, int seq,int xPosition, int yPosition) {
         this.id = UUID.randomUUID().toString();
         holdBikeList = new ArrayList<>();
+        this.seq = seq;
 
         this.xPosition = xPosition;
         this.yPosition = yPosition;
@@ -36,5 +38,13 @@ public class RentOffice {
 
     public String getId() {
         return id;
+    }
+
+    public int getSeq() {
+        return seq;
+    }
+
+    public int getLocatedBikesCnt(){
+        return holdBikeList.size();
     }
 }

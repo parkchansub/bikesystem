@@ -25,6 +25,11 @@ public class BikeSystem {
         makeRentOffice(problemType.getxRange(), problemType.getyRange());
     }
 
+    public void createUser(User user){
+       users.add(user);
+    }
+
+
     /*public BikeSystem(int truckCnt, int initBikeCnt, int xRange, int yRange) {
         this.truckCnt = truckCnt;
         this.initBikeCnt = initBikeCnt;
@@ -43,7 +48,7 @@ public class BikeSystem {
             int yPosition = i % yRange;
 
             List<Bike> bikeList = IntStream.range(0, this.initBikeCnt).mapToObj(j -> new Bike()).collect(Collectors.toList());
-            rentOffices.add(i, new RentOffice(bikeList, xPosition, yPosition));
+            rentOffices.add(i, new RentOffice(bikeList, i ,xPosition, yPosition));
         }
     }
 
@@ -60,5 +65,9 @@ public class BikeSystem {
         }
         // 없는 경우 exception 처리 필요
         return new RentOffice();
+    }
+
+    public List<RentOffice> getRentOffices() {
+        return rentOffices;
     }
 }

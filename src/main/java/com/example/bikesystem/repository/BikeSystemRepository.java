@@ -1,5 +1,6 @@
 package com.example.bikesystem.repository;
 
+import com.example.bikesystem.dto.LocationsResponseDTO;
 import com.example.bikesystem.dto.RentBikeRequestDTO;
 import com.example.bikesystem.dto.SystemStartResponseDTO;
 import com.example.bikesystem.item.Bike;
@@ -27,9 +28,15 @@ public class BikeSystemRepository {
     public Bike getRentBike(RentBikeRequestDTO rentBikeRequestDTO) {
         LocalTime localTime = null;
         User user = new User();
+
+        system.createUser(user);
         system.rentBike(user, rentBikeRequestDTO.getRentOfficeId(), localTime);
         return new Bike();
     }
 
 
+    public LocationsResponseDTO getLocationInfo(String authorization) {
+
+        return new LocationsResponseDTO(this.system.getRentOffices());
+    }
 }

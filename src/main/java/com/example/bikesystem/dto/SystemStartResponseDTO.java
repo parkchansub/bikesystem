@@ -13,7 +13,6 @@ public class SystemStartResponseDTO {
     private String time;
 
     @Builder
-
     public SystemStartResponseDTO(String problem) {
         this.auth_key = String.valueOf(UUID.randomUUID());
         this.problem = problem;
