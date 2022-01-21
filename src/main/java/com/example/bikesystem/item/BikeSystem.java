@@ -6,19 +6,33 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class System {
+public class BikeSystem {
 
     private List<RentOffice> rentOffices;
+    private List<User> users;
 
     private int truckCnt;
     private int initBikeCnt;
 
-    public System(int truckCnt, int initBikeCnt, int xRange, int yRange) {
+    public BikeSystem(ProblemType problemType) {
+
+        this.rentOffices = new ArrayList<>();
+        this.users = new ArrayList<>();
+
+        this.truckCnt = problemType.getTruckCnt();
+        this.initBikeCnt = problemType.getInitBikeCnt();
+
+        makeRentOffice(problemType.getxRange(), problemType.getyRange());
+    }
+
+    /*public BikeSystem(int truckCnt, int initBikeCnt, int xRange, int yRange) {
         this.truckCnt = truckCnt;
         this.initBikeCnt = initBikeCnt;
         this.rentOffices = new ArrayList<>();
+        this.users = new ArrayList<>();
+
         makeRentOffice(xRange, yRange);
-    }
+    }*/
 
     public void makeRentOffice(int xRange, int yRange) {
         int creatCnt = xRange * yRange;
@@ -33,11 +47,14 @@ public class System {
         }
     }
 
-    public Rent rentBike(User user, Long rentOfficeId, LocalTime localTime) {
+
+    public Rent rentBike(User user, String rentOfficeId, LocalTime localTime) {
         return new Rent(user, findRentOffice(rentOfficeId), localTime);
     }
 
-    public RentOffice findRentOffice(Long rentOfficeId){
+
+
+    public RentOffice findRentOffice(String rentOfficeId){
         if(rentOffices.stream().anyMatch(rentOffice -> rentOffice.getId().equals(rentOfficeId))){
             return rentOffices.stream().filter(rentOffice -> rentOffice.getId().equals(rentOfficeId)).findFirst().get();
         }
