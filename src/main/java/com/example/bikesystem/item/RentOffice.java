@@ -1,6 +1,5 @@
 package com.example.bikesystem.item;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,9 +19,8 @@ public class RentOffice {
 
     public RentOffice(List<Bike> bikes, int seq,int xPosition, int yPosition) {
         this.id = UUID.randomUUID().toString();
-        holdBikeList = new ArrayList<>();
+        holdBikeList = bikes;
         this.seq = seq;
-
         this.xPosition = xPosition;
         this.yPosition = yPosition;
     }

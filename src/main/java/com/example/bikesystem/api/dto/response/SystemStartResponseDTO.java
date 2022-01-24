@@ -1,9 +1,7 @@
-package com.example.bikesystem.dto;
+package com.example.bikesystem.api.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;
-
-import java.util.UUID;
 
 @Getter
 public class SystemStartResponseDTO {
@@ -13,8 +11,8 @@ public class SystemStartResponseDTO {
     private String time;
 
     @Builder
-    public SystemStartResponseDTO(String problem) {
-        this.auth_key = String.valueOf(UUID.randomUUID());
+    public SystemStartResponseDTO(String problem, String authKey) {
+        this.auth_key = authKey;
         this.problem = problem;
         this.time = "0";
     }

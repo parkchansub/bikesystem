@@ -10,6 +10,11 @@ public class BikeSystem {
 
     private List<RentOffice> rentOffices;
     private List<User> users;
+    private List<Truck> trucks;
+
+    private String serverStatus;
+    private Integer serverTime;
+    private String truckTotalMoveDistance;
 
     private int truckCnt;
     private int initBikeCnt;
@@ -18,27 +23,21 @@ public class BikeSystem {
 
         this.rentOffices = new ArrayList<>();
         this.users = new ArrayList<>();
+        this.trucks = new ArrayList<>();
 
         this.truckCnt = problemType.getTruckCnt();
         this.initBikeCnt = problemType.getInitBikeCnt();
 
         makeRentOffice(problemType.getxRange(), problemType.getyRange());
-    }
-
-    public void createUser(User user){
-       users.add(user);
+        makeTrucks();
     }
 
 
-    /*public BikeSystem(int truckCnt, int initBikeCnt, int xRange, int yRange) {
-        this.truckCnt = truckCnt;
-        this.initBikeCnt = initBikeCnt;
-        this.rentOffices = new ArrayList<>();
-        this.users = new ArrayList<>();
-
-        makeRentOffice(xRange, yRange);
-    }*/
-
+    /**
+     * 대여소 생성
+     * @param xRange
+     * @param yRange
+     */
     public void makeRentOffice(int xRange, int yRange) {
         int creatCnt = xRange * yRange;
 
@@ -52,11 +51,43 @@ public class BikeSystem {
         }
     }
 
-
-    public Rent rentBike(User user, String rentOfficeId, LocalTime localTime) {
-        return new Rent(user, findRentOffice(rentOfficeId), localTime);
+    /**
+     * 트럭 생성(초기 매소드 실행)
+     */
+    public void makeTrucks(){
+        this.trucks = IntStream.range(0, this.truckCnt).mapToObj(i -> new Truck(i)).collect(Collectors.toList());
     }
 
+
+    /**
+     * 사용자 생성
+     * @param user
+     */
+    public void createUser(User user){
+        users.add(user);
+    }
+
+    /**
+     * 서버에 등록된 대여소 정보 조회
+     * @return List<RentOffice>(대여소 리스트)
+     */
+    public List<RentOffice> getRentOffices() {
+        return rentOffices;
+    }
+
+
+    /**
+     * 서버에 등록된 트럭 정보 조회
+     * @return List<Truck>(트럭 리스트)
+     */
+    public List<Truck> getTrucks() {
+        return trucks;
+    }
+
+
+    public Truck getTruckInfo(int truckSeq){
+        return trucks.get(truckSeq);
+    }
 
 
     public RentOffice findRentOffice(String rentOfficeId){
@@ -67,7 +98,8 @@ public class BikeSystem {
         return new RentOffice();
     }
 
-    public List<RentOffice> getRentOffices() {
-        return rentOffices;
+
+    public Rent rentBike(User user, String rentOfficeId, LocalTime localTime) {
+        return new Rent(user, findRentOffice(rentOfficeId), localTime);
     }
 }

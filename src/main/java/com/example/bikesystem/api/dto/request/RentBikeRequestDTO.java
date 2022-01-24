@@ -1,4 +1,4 @@
-package com.example.bikesystem.dto;
+package com.example.bikesystem.api.dto.request;
 
 import lombok.Getter;
 
