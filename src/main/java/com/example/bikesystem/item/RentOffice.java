@@ -1,5 +1,7 @@
 package com.example.bikesystem.item;
 
+import com.example.bikesystem.api.exception.ApiException;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -44,5 +46,19 @@ public class RentOffice {
 
     public int getLocatedBikesCnt(){
         return holdBikeList.size();
+    }
+
+
+    public Bike loadBike(){
+
+        Bike bike = holdBikeList.get(0);
+        holdBikeList.remove(bike);
+        return bike;
+
+
+    }
+
+    public void DropBike(Bike bike){
+        holdBikeList.add(bike);
     }
 }

@@ -31,4 +31,16 @@ public class Truck {
     public int getLoadBikeCnt(){
         return bikeList.size();
     }
+
+
+    public Truck moveActionTruck(int moveDistance){
+        this.locationId = this.locationId + moveDistance;
+        return this;
+    }
+
+
+
+
+
+
 }

@@ -8,6 +8,9 @@ import java.util.stream.IntStream;
 
 public class BikeSystem {
 
+    private final int TRUCKCNT;
+    private final int INITBIKECNT;
+
     private List<RentOffice> rentOffices;
     private List<User> users;
     private List<Truck> trucks;
@@ -16,8 +19,6 @@ public class BikeSystem {
     private Integer serverTime;
     private String truckTotalMoveDistance;
 
-    private int truckCnt;
-    private int initBikeCnt;
 
     public BikeSystem(ProblemType problemType) {
 
@@ -25,8 +26,8 @@ public class BikeSystem {
         this.users = new ArrayList<>();
         this.trucks = new ArrayList<>();
 
-        this.truckCnt = problemType.getTruckCnt();
-        this.initBikeCnt = problemType.getInitBikeCnt();
+        this.TRUCKCNT = problemType.getTruckCnt();
+        this.INITBIKECNT = problemType.getInitBikeCnt();
 
         makeRentOffice(problemType.getxRange(), problemType.getyRange());
         makeTrucks();
@@ -46,7 +47,7 @@ public class BikeSystem {
             int xPosition = i / yRange;
             int yPosition = i % yRange;
 
-            List<Bike> bikeList = IntStream.range(0, this.initBikeCnt).mapToObj(j -> new Bike()).collect(Collectors.toList());
+            List<Bike> bikeList = IntStream.range(0, this.INITBIKECNT).mapToObj(j -> new Bike()).collect(Collectors.toList());
             rentOffices.add(i, new RentOffice(bikeList, i ,xPosition, yPosition));
         }
     }
@@ -55,7 +56,7 @@ public class BikeSystem {
      * 트럭 생성(초기 매소드 실행)
      */
     public void makeTrucks(){
-        this.trucks = IntStream.range(0, this.truckCnt).mapToObj(i -> new Truck(i)).collect(Collectors.toList());
+        this.trucks = IntStream.range(0, this.TRUCKCNT).mapToObj(i -> new Truck(i)).collect(Collectors.toList());
     }
 
 

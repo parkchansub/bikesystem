@@ -1,6 +1,10 @@
 package com.example.bikesystem.item;
 
 
+import com.example.bikesystem.repository.BikeSystemRepository;
+
+import java.util.function.Function;
+
 /**
  *  0: 6초간 아무것도 하지 않음
  *  1: 위로 한 칸 이동
@@ -11,20 +15,24 @@ package com.example.bikesystem.item;
  *  6: 자전거 하차
  * */
 public enum TruckMoveType {
-    STOP(0),
-    MOVEUP(1),
-    MOVERIGHT(2),
-    MOVEDOWN(3),
-    MOVELEFT(4),
-    LOADBIKE(5),
-    DROPBIKE(6);
+    STOP(0, truck -> truck.moveActionTruck(0)),
+    MOVEUP(1,truck -> truck.moveActionTruck(1)),
+    MOVERIGHT(2, truck -> truck.moveActionTruck(2)),
+    MOVEDOWN(3, truck -> truck.moveActionTruck(0)),
+    MOVELEFT(4, truck -> truck.moveActionTruck(0)),
+    LOADBIKE(5, truck -> truck.moveActionTruck(0)),
+    DROPBIKE(6, truck -> truck.moveActionTruck(0));
 
     private int typeCode;
+    private Function<Truck, Truck> expression;
 
-    private
+    public Truck playCommand(Truck truck){
+        return expression.apply(truck);
+    }
 
 
-    TruckMoveType(int typeCode) {
+    TruckMoveType(int typeCode, Function<Truck, Truck> expression) {
         this.typeCode = typeCode;
+        this.expression = expression;
     }
 }

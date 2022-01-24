@@ -22,10 +22,16 @@ public class BikeSystemRepository {
     private BikeSystem system;
     private List<String> authKeyList;
 
+    static int xRange;
+    static int yRange;
+
 
     public SystemStartResponseDTO startBikeSystem(ProblemType problemType) {
         this.authKeyList = new ArrayList<>();
         this.system = new BikeSystem(problemType);
+        this.xRange = problemType.getxRange();
+        this.yRange = problemType.getyRange();
+
 
         String authKey = String.valueOf(UUID.randomUUID());
         authKeyList.add(authKey);
@@ -72,6 +78,7 @@ public class BikeSystemRepository {
         for (Command command : reqDto.getCommands()) {
 
             Truck truckInfo = system.getTruckInfo(command.getTruck_id());
+
         }
         return new SimulateResponseDTO();
     }
