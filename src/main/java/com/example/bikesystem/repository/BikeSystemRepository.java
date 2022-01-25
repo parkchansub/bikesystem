@@ -62,21 +62,29 @@ public class BikeSystemRepository {
 
     public SimulateResponseDTO simulate(SimulateRequestDTO reqDto) {
 
+        ActionItem resultItem;
         for (Command command : reqDto.getCommands()) {
 
-            Truck truckInfo = system.findTruckInfo(command.getTruck_id());
-            ActionItem actionItem = new ActionItem();
+            resultItem = new ActionItem(system.findRentOffice(command.getTruck_id()), system.findTruckInfo(command.getTruck_id()));
             for (Integer integer : command.getCommand()) {
 
                 TruckMoveType truckMoveType = TruckMoveType.findTruckMoveType(integer);
-                actionItem = truckMoveType.getTruckInfo(ActionItem.builder()
-                        .truck(truckInfo)
-                        .rentOffice(system.findRentOffice(truckInfo.getLocationId()))
+
+                System.out.println("truck info : "+ resultItem.getTruck().toString());
+                System.out.println("truck location : "+ resultItem.getRentOffice().toString());
+                System.out.println("---------------------------------------");
+
+
+                resultItem = truckMoveType.getTruckInfo(ActionItem.builder()
+                        .truck(resultItem.getTruck())
+                        .rentOffice(system.findRentOffice(resultItem.getTruck().getLocationId()))
                         .build());
 
             }
-            system.updateBikeSystem(actionItem);
+            system.updateBikeSystem(resultItem);
         }
+
+
 
        return SimulateResponseDTO.builder()
                .system(system)

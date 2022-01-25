@@ -113,8 +113,8 @@ public class BikeSystem {
         trucks.set(actionItem.getTruck().getLocationId(), actionItem.getTruck());
         rentOffices.set(actionItem.getRentOffice().getSeq(), actionItem.getRentOffice());
 
-        this.truckTotalMoveDistance = +actionItem.getMoveDistance();
-        this.failReuqestCnt = +actionItem.getFailRequestCnt();
+        this.truckTotalMoveDistance = this.truckTotalMoveDistance+actionItem.getMoveDistance();
+        this.failReuqestCnt = this.failReuqestCnt+actionItem.getFailRequestCnt();
         return this;
     }
 
@@ -124,6 +124,15 @@ public class BikeSystem {
 
     public int getFailReuqestCnt() {
         return failReuqestCnt;
+    }
+
+
+    public void sendTime(){
+        this.serverTime = this.serverTime + 1;
+    }
+
+    public Integer getServerTime() {
+        return serverTime;
     }
 
     public RentOffice findRentOffice(String rentOfficeId){

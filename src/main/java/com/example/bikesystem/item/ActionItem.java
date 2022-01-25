@@ -36,9 +36,9 @@ public class ActionItem {
         truck.moveCammand(range);
 
         if (this.truck.getLocationId() > 0) {
-            this.moveDistance = +100;
+            this.moveDistance = this.moveDistance+100;
         } else {
-            this.failRequestCnt = +1;
+            this.failRequestCnt = this.failRequestCnt+1;
         }
 
         return this;

@@ -39,7 +39,7 @@ public class Truck {
 
 
     public Truck moveCammand(int range){
-        this.locationId = +range;
+        this.locationId = this.locationId + range;
         return this;
     }
 
@@ -54,6 +54,16 @@ public class Truck {
         return bike;
     }
 
-
-
+    @Override
+    public String toString() {
+        return "Truck{" +
+                "id='" + id + '\'' +
+                ", bikeList=" + bikeList +
+                ", locationId=" + locationId +
+                ", seq=" + seq +
+                ", moveDistance=" + moveDistance +
+                ", xRange=" + xRange +
+                ", yRange=" + yRange +
+                '}';
+    }
 }

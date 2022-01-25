@@ -61,4 +61,15 @@ public class RentOffice {
         holdBikeList.add(bike);
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "RentOffice{" +
+                "id='" + id + '\'' +
+                ", seq=" + seq +
+                ", holdBikeList=" + holdBikeList +
+                ", xPosition=" + xPosition +
+                ", yPosition=" + yPosition +
+                '}';
+    }
 }
