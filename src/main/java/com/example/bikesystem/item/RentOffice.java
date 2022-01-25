@@ -49,16 +49,16 @@ public class RentOffice {
     }
 
 
-    public Bike loadBike(){
+    public Bike lostBike(){
 
         Bike bike = holdBikeList.get(0);
         holdBikeList.remove(bike);
         return bike;
 
-
     }
 
-    public void DropBike(Bike bike){
+    public RentOffice getBike(Bike bike){
         holdBikeList.add(bike);
+        return this;
     }
 }

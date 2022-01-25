@@ -1,5 +1,6 @@
 package com.example.bikesystem.api.dto.response;
 
+import com.example.bikesystem.item.BikeSystem;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -15,10 +16,10 @@ public class SimulateResponseDTO {
     }
 
     @Builder
-    public SimulateResponseDTO(String status, Integer time, Integer failed_requests_count, String distance) {
-        this.status = status;
-        this.time = time;
-        this.failed_requests_count = failed_requests_count;
-        this.distance = distance;
+    public SimulateResponseDTO(BikeSystem system) {
+        this.status = "ready";
+        this.time = +1;
+        this.failed_requests_count = system.getFailReuqestCnt();
+        this.distance = String.valueOf(system.getTruckTotalMoveDistance());
     }
 }

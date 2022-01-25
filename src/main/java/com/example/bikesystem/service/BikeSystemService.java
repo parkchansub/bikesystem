@@ -23,9 +23,7 @@ public class BikeSystemService {
         return bikeSystemRepository.startBikeSystem(ProblemType.findProblemType(problem));
     }
 
-    public Bike rentBike(RentBikeRequestDTO rentBikeRequestDTO) {
-        return bikeSystemRepository.getRentBike(rentBikeRequestDTO);
-    }
+
 
 
     public LocationsResponseDTO getLocationInfo(String authorization) {

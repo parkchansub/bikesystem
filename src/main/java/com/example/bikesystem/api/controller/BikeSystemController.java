@@ -285,9 +285,38 @@ public class BikeSystemController {
     }
 
 
-    @GetMapping("/rentbike")
-    public Bike requestRentBike(@RequestBody RentBikeRequestDTO rentBikeRequestDTO, HttpServletRequest request, HttpServletResponse response){
-        return bikeSystemService.rentBike(rentBikeRequestDTO);
-    }
+    /**
+     * Score API
+     *     해당 Auth key로 획득한 점수를 반환한다. 점수는 높을수록 좋다.
+     *     카카오 T 바이크 서버의 상태가 finished가 아닐 때 본 API를 호출하면 response의 score는 무조건 0.0이다.
+     *
+     *     Request
+     *     GET /score
+     *     Authorization: {auth_key}
+     *     Content-Type: application/json
+     *     Header
+     *
+     *     Name	Description
+     *     Authorization	Start API 에서 발급받은 auth_key
+     *     Example
+     *
+     *     curl -X GET {BASE_URL}/score \
+     *     -H 'Authorization: {AUTH_KEY}' \
+     *     -H 'Content-Type: application/json'
+     *     Response
+     *     Key
+     *
+     *     Key	Type	Description
+     *     score	Float	획득한 점수
+     *     Example
+     *
+     *     {
+     *     "score": 75.7
+     *     }
+     * [1]: 실제 카카오 T 바이크에서 사용자는 애플리케이션과 자동 잠금장치를 이용하여 아무 곳에서나 자전거를 대여하고 반납할 수 있으나, 이번 과제에서는 문제를 간단화하기 위하여 지정된 위치에서만 자전거를 대여하고 반납할 수 있다고 가정한다.
+     */
+
+
+
 
 }

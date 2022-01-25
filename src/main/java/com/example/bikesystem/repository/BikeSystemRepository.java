@@ -22,15 +22,10 @@ public class BikeSystemRepository {
     private BikeSystem system;
     private List<String> authKeyList;
 
-    static int xRange;
-    static int yRange;
-
 
     public SystemStartResponseDTO startBikeSystem(ProblemType problemType) {
         this.authKeyList = new ArrayList<>();
         this.system = new BikeSystem(problemType);
-        this.xRange = problemType.getxRange();
-        this.yRange = problemType.getyRange();
 
 
         String authKey = String.valueOf(UUID.randomUUID());
@@ -48,14 +43,6 @@ public class BikeSystemRepository {
         }
     }
 
-    public Bike getRentBike(RentBikeRequestDTO rentBikeRequestDTO) {
-        LocalTime localTime = null;
-        User user = new User();
-
-        system.createUser(user);
-        system.rentBike(user, rentBikeRequestDTO.getRentOfficeId(), localTime);
-        return new Bike();
-    }
 
 
     public LocationsResponseDTO getLocationInfo(String authorization) {
@@ -77,9 +64,22 @@ public class BikeSystemRepository {
 
         for (Command command : reqDto.getCommands()) {
 
-            Truck truckInfo = system.getTruckInfo(command.getTruck_id());
+            Truck truckInfo = system.findTruckInfo(command.getTruck_id());
+            ActionItem actionItem = new ActionItem();
+            for (Integer integer : command.getCommand()) {
 
+                TruckMoveType truckMoveType = TruckMoveType.findTruckMoveType(integer);
+                actionItem = truckMoveType.getTruckInfo(ActionItem.builder()
+                        .truck(truckInfo)
+                        .rentOffice(system.findRentOffice(truckInfo.getLocationId()))
+                        .build());
+
+            }
+            system.updateBikeSystem(actionItem);
         }
-        return new SimulateResponseDTO();
+
+       return SimulateResponseDTO.builder()
+               .system(system)
+               .build();
     }
 }
