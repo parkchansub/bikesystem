@@ -6,18 +6,12 @@ import lombok.Getter;
 @Getter
 public class ActionItem {
 
-    private int moveDistance;
-    private int failRequestCnt;
 
     private RentOffice rentOffice;
     private Truck truck;
 
     private int xRange;
     private int yRange;
-
-
-    public ActionItem() {
-    }
 
     @Builder
     public ActionItem(RentOffice rentOffice, Truck truck) {
@@ -27,31 +21,34 @@ public class ActionItem {
         this.xRange = truck.getXRange();
         this.yRange = truck.getYRange();
 
-        this.moveDistance = 0;
-        this.failRequestCnt = 0;
-
     }
 
     public ActionItem moveCommand(int range){
         truck.moveCammand(range);
+        return this;
+    }
 
-        if (this.truck.getLocationId() > 0) {
-            this.moveDistance = this.moveDistance+100;
-        } else {
-            this.failRequestCnt = this.failRequestCnt+1;
+
+    public ActionItem dropBike(){
+        if(truck.isSatisfiedByDropBike()){
+            rentOffice.getBike(truck.dropBike());
+        }else{
+            truck.addFailReqCnt();
         }
 
         return this;
     }
 
 
-    public ActionItem dropBike(){
-        rentOffice.getBike(truck.dropBike());
-        return this;
-    }
+
 
     public ActionItem loadBike(){
-        truck.loadBike(this.rentOffice.lostBike());
+
+        if(this.rentOffice.isSatisfiedByLostBike()){
+            truck.loadBike(this.rentOffice.lostBike());
+        }else{
+            truck.addFailReqCnt();
+        }
         return this;
     }
 }

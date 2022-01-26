@@ -1,7 +1,5 @@
 package com.example.bikesystem.item;
 
-import com.example.bikesystem.api.exception.ApiException;
-
 import java.util.List;
 import java.util.UUID;
 
@@ -49,27 +47,24 @@ public class RentOffice {
     }
 
 
-    public Bike lostBike(){
 
+    public boolean isSatisfiedByLostBike(){
+        return holdBikeList.size()>0 ? true : false;
+    }
+
+    public Bike lostBike(){
         Bike bike = holdBikeList.get(0);
         holdBikeList.remove(bike);
         return bike;
 
     }
 
+
+
+
     public RentOffice getBike(Bike bike){
         holdBikeList.add(bike);
         return this;
     }
 
-    @Override
-    public String toString() {
-        return "RentOffice{" +
-                "id='" + id + '\'' +
-                ", seq=" + seq +
-                ", holdBikeList=" + holdBikeList +
-                ", xPosition=" + xPosition +
-                ", yPosition=" + yPosition +
-                '}';
-    }
 }

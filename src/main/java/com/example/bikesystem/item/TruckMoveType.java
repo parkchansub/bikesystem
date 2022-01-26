@@ -16,6 +16,7 @@ import java.util.function.Function;
  *  6: 자전거 하차
  * */
 public enum TruckMoveType {
+
     STOP(0, actionItem -> actionItem),
     MOVEUP(1, actionItem -> actionItem.moveCommand(1)),
     MOVERIGHT(2, actionItem -> actionItem.moveCommand(actionItem.getYRange())),

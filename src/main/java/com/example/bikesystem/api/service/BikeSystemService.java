@@ -1,16 +1,14 @@
-package com.example.bikesystem.service;
+package com.example.bikesystem.api.service;
 
 import com.example.bikesystem.api.dto.request.SimulateRequestDTO;
-import com.example.bikesystem.api.dto.response.LocationsResponseDTO;
-import com.example.bikesystem.api.dto.request.RentBikeRequestDTO;
-import com.example.bikesystem.api.dto.response.SimulateResponseDTO;
-import com.example.bikesystem.api.dto.response.SystemStartResponseDTO;
-import com.example.bikesystem.api.dto.response.TruckResponseDTO;
-import com.example.bikesystem.item.Bike;
+import com.example.bikesystem.api.dto.response.*;
+import com.example.bikesystem.common.exception.ApiException;
 import com.example.bikesystem.item.ProblemType;
-import com.example.bikesystem.repository.BikeSystemRepository;
+import com.example.bikesystem.api.repository.BikeSystemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,13 +18,18 @@ public class BikeSystemService {
 
     public SystemStartResponseDTO startBikeSystem(String problem) {
 
-        return bikeSystemRepository.startBikeSystem(ProblemType.findProblemType(problem));
+        Optional<ProblemType> problemType = ProblemType.findProblemType(problem);
+        if(problemType.isEmpty()){
+            throw new ApiException(400,"problem 값 잘못됨");
+        }
+        return bikeSystemRepository.startBikeSystem(problemType.get());
     }
 
 
 
 
     public LocationsResponseDTO getLocationInfo(String authorization) {
+
         return bikeSystemRepository.getLocationInfo(authorization);
     }
 
@@ -36,5 +39,11 @@ public class BikeSystemService {
 
     public SimulateResponseDTO simulate(SimulateRequestDTO reqDto) {
         return bikeSystemRepository.simulate(reqDto);
+    }
+
+    public ScoreResponseDTO score() {
+
+
+        return null;
     }
 }

@@ -2,13 +2,8 @@ package com.example.bikesystem.api.controller;
 
 
 import com.example.bikesystem.api.dto.request.SimulateRequestDTO;
-import com.example.bikesystem.api.dto.response.LocationsResponseDTO;
-import com.example.bikesystem.api.dto.request.RentBikeRequestDTO;
-import com.example.bikesystem.api.dto.response.SimulateResponseDTO;
-import com.example.bikesystem.api.dto.response.SystemStartResponseDTO;
-import com.example.bikesystem.api.dto.response.TruckResponseDTO;
-import com.example.bikesystem.item.Bike;
-import com.example.bikesystem.service.BikeSystemService;
+import com.example.bikesystem.api.dto.response.*;
+import com.example.bikesystem.api.service.BikeSystemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,10 +14,8 @@ import java.util.Map;
 
 /**
  * HTTPS로 통신한다.
- *
- * 초당 10회가 넘는 API 호출은 서버가 응답하지 않을 수 있다.
- * BASE URL: https://kox947ka1a.execute-api.ap-northeast-2.amazonaws.com/prod/users
  * Response Codes
+ *
  * API를 성공적으로 호출할 경우 200 코드를 반환하고, 그 외의 경우에는 아래의 코드를 반환한다.
  *
  * Response Code	Description
@@ -34,47 +27,13 @@ import java.util.Map;
  */
 
 
-
-
-/**
-
-
-
-        Score API
-        해당 Auth key로 획득한 점수를 반환한다. 점수는 높을수록 좋다. 카카오 T 바이크 서버의 상태가 finished가 아닐 때 본 API를 호출하면 response의 score는 무조건 0.0이다.
-
-        Request
-        GET /score
-        Authorization: {auth_key}
-        Content-Type: application/json
-        Header
-
-        Name	Description
-        Authorization	Start API 에서 발급받은 auth_key
-        Example
-
-        curl -X GET {BASE_URL}/score \
-        -H 'Authorization: {AUTH_KEY}' \
-        -H 'Content-Type: application/json'
-        Response
-        Key
-
-        Key	Type	Description
-        score	Float	획득한 점수
-        Example
-
-        {
-        "score": 75.7
-        }
-        [1]: 실제 카카오 T 바이크에서 사용자는 애플리케이션과 자동 잠금장치를 이용하여 아무 곳에서나 자전거를 대여하고 반납할 수 있으나, 이번 과제에서는 문제를 간단화하기 위하여 지정된 위치에서만 자전거를 대여하고 반납할 수 있다고 가정한다.
- */
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/bikesystem")
 public class BikeSystemController {
 
     private final BikeSystemService bikeSystemService;
+
 
 
     /**
@@ -116,8 +75,7 @@ public class BikeSystemController {
      */
     @PostMapping("/start")
     public SystemStartResponseDTO startBikeSystem(@RequestBody Map<String,String> reqDto, HttpServletRequest request, HttpServletResponse response){
-        String problem = reqDto.get("problem");
-        return bikeSystemService.startBikeSystem(problem);
+        return bikeSystemService.startBikeSystem(reqDto.get("problem"));
     }
 
 
@@ -154,7 +112,7 @@ public class BikeSystemController {
      */
 
     @GetMapping("/locations")
-    public LocationsResponseDTO getLocationInfo(@RequestBody Map<String,String> reqDto, HttpServletRequest request, HttpServletResponse response){
+    public LocationsResponseDTO getLocationInfo(HttpServletRequest request, HttpServletResponse response){
 
         String authorization = request.getHeader("authorization");
 
@@ -197,7 +155,7 @@ public class BikeSystemController {
      * }
      */
     @GetMapping("/trucks")
-    public TruckResponseDTO getTrucksInfo(@RequestBody Map<String,String> reqDto, HttpServletRequest request, HttpServletResponse response){
+    public TruckResponseDTO getTrucksInfo(HttpServletRequest request, HttpServletResponse response){
 
         return bikeSystemService.getTrucksInfo(request.getHeader("authorization"));
     }
@@ -313,9 +271,14 @@ public class BikeSystemController {
      *     {
      *     "score": 75.7
      *     }
-     * [1]: 실제 카카오 T 바이크에서 사용자는 애플리케이션과 자동 잠금장치를 이용하여 아무 곳에서나 자전거를 대여하고 반납할 수 있으나, 이번 과제에서는 문제를 간단화하기 위하여 지정된 위치에서만 자전거를 대여하고 반납할 수 있다고 가정한다.
+     * [1]: 실제 카카오 T 바이크에서 사용자는 애플리케이션과 자동 잠금장치를 이용하여 아무 곳에서나 자전거를 대여하고 반납할 수 있으나,
+     * 이번 과제에서는 문제를 간단화하기 위하여 지정된 위치에서만 자전거를 대여하고 반납할 수 있다고 가정한다.
      */
+    @GetMapping("/score")
+    public ScoreResponseDTO score(HttpServletRequest request, HttpServletResponse response){
 
+        return bikeSystemService.score();
+    }
 
 
 

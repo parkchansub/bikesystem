@@ -33,6 +33,7 @@ public class BikeSystem {
         this.INITBIKECNT = problemType.getInitBikeCnt();
         this.XRANGE = problemType.getxRange();
         this.YRANGE = problemType.getyRange();
+        this.serverTime =0;
         this.truckTotalMoveDistance = 0;
         this.failReuqestCnt = 0;
 
@@ -110,11 +111,15 @@ public class BikeSystem {
 
 
     public BikeSystem updateBikeSystem(ActionItem actionItem) {
-        trucks.set(actionItem.getTruck().getLocationId(), actionItem.getTruck());
-        rentOffices.set(actionItem.getRentOffice().getSeq(), actionItem.getRentOffice());
 
-        this.truckTotalMoveDistance = this.truckTotalMoveDistance+actionItem.getMoveDistance();
-        this.failReuqestCnt = this.failReuqestCnt+actionItem.getFailRequestCnt();
+        Truck modifyTruck = actionItem.getTruck();
+        RentOffice modifyRentOffice = actionItem.getRentOffice();
+
+        trucks.set(modifyTruck.getSeq(), modifyTruck);
+        rentOffices.set(modifyRentOffice.getSeq(), modifyRentOffice);
+
+        this.truckTotalMoveDistance = this.truckTotalMoveDistance+modifyTruck.getMoveDistance();
+        this.failReuqestCnt = this.failReuqestCnt+modifyTruck.getFailRequestCnt();
         return this;
     }
 

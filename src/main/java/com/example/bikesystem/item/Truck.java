@@ -16,6 +16,8 @@ public class Truck {
     private int seq;
 
     private int moveDistance;
+    private int failRequestCnt;
+
 
     /*가로 세로 최대 길이*/
     private int xRange;
@@ -38,32 +40,35 @@ public class Truck {
     }
 
 
-    public Truck moveCammand(int range){
-        this.locationId = this.locationId + range;
-        return this;
+    public void moveCammand(int range){
+        if(this.locationId + range > 0){
+            this.locationId = this.locationId + range;
+            this.moveDistance = this.moveDistance+100;
+        }else{
+            addFailReqCnt();
+        }
+
     }
 
-    public Truck loadBike(Bike bike){
+    public void addFailReqCnt() {
+        this.failRequestCnt = this.failRequestCnt+1;
+    }
+
+    public void loadBike(Bike bike){
         bikeList.add(bike);
-        return this;
     }
 
-    public Bike dropBike(){
+    public boolean isSatisfiedByDropBike(){
+        return bikeList.size()>0 ? true : false;
+    }
+
+
+
+    public Bike dropBike() {
         Bike bike = bikeList.get(0);
         bikeList.remove(bike);
+
         return bike;
     }
 
-    @Override
-    public String toString() {
-        return "Truck{" +
-                "id='" + id + '\'' +
-                ", bikeList=" + bikeList +
-                ", locationId=" + locationId +
-                ", seq=" + seq +
-                ", moveDistance=" + moveDistance +
-                ", xRange=" + xRange +
-                ", yRange=" + yRange +
-                '}';
-    }
 }

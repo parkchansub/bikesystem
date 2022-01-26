@@ -1,6 +1,9 @@
 package com.example.bikesystem.item;
 
+import com.example.bikesystem.common.exception.ApiException;
+
 import java.util.Arrays;
+import java.util.Optional;
 
 public enum ProblemType {
     ONE("1",5,3,5,5),
@@ -21,11 +24,10 @@ public enum ProblemType {
     }
 
 
-    public static ProblemType findProblemType(String problemNum){
+    public static Optional<ProblemType> findProblemType(String problemNum){
         return Arrays.stream(ProblemType.values())
                 .filter(problemType -> problemType.problemNum.equals(problemNum))
-                .findFirst()
-                .orElse(ONE);
+                .findFirst();
     }
 
     public String getProblemNum() {
