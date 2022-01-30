@@ -8,6 +8,8 @@ import com.example.bikesystem.api.repository.BikeSystemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -45,5 +47,26 @@ public class BikeSystemService {
 
 
         return null;
+    }
+
+
+    public RentResponseDTO rent(Map<String, List> reqDto) {
+
+
+        for (String time : reqDto.keySet()) {
+
+            List list = reqDto.get(time);
+
+            for (Object o : list) {
+                System.out.println("time:"+time+" val : "+o);
+                List requestItem = (List) o; /*(빌리는 대여소ID, 반납하는 대여소ID, 빌리는 시간(분))*/
+
+
+
+
+            }
+
+        }
+        return new RentResponseDTO();
     }
 }

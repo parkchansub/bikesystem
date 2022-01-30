@@ -35,7 +35,6 @@ public class ActionItem {
         }else{
             truck.addFailReqCnt();
         }
-
         return this;
     }
 
