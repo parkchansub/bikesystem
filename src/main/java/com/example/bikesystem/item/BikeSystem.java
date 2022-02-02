@@ -7,26 +7,41 @@ import java.util.stream.IntStream;
 
 public class BikeSystem {
 
+    /*운행 하는 트럭수*/
     private final int TRUCKCNT;
+
+    /*초기 자전거 수*/
     private final int INITBIKECNT;
 
     private final int XRANGE;
     private final int YRANGE;
 
+    /*대여소*/
     private List<RentOffice> rentOffices;
+
+    /**/
     private List<User> users;
+
+    /*트럭*/
     private List<Truck> trucks;
 
+    /*서버 상태*/
     private String serverStatus;
+
+    /*서버 시간*/
     private Integer serverTime;
+
+    /*트럭 운행 거리*/
     private int truckTotalMoveDistance;
+
+    /*요청 실패 건수*/
     private int failReuqestCnt;
 
 
     public BikeSystem(ProblemType problemType) {
 
-        this.rentOffices = new ArrayList<>();
         this.users = new ArrayList<>();
+        this.rentOffices = new ArrayList<>();
         this.trucks = new ArrayList<>();
 
         this.TRUCKCNT = problemType.getTruckCnt();
@@ -119,8 +134,12 @@ public class BikeSystem {
         rentOffices.set(modifyRentOffice.getSeq(), modifyRentOffice);
 
         this.truckTotalMoveDistance = this.truckTotalMoveDistance+modifyTruck.getMoveDistance();
-        this.failReuqestCnt = this.failReuqestCnt+modifyTruck.getFailRequestCnt();
+        updateFailRequestCnt(modifyTruck.getFailRequestCnt());
         return this;
+    }
+
+    public void updateFailRequestCnt(int failCnt){
+        this.failReuqestCnt = this.failReuqestCnt + failCnt;
     }
 
     public int getTruckTotalMoveDistance() {
@@ -140,12 +159,24 @@ public class BikeSystem {
         return serverTime;
     }
 
-    public RentOffice findRentOffice(String rentOfficeId){
-        if(rentOffices.stream().anyMatch(rentOffice -> rentOffice.getId().equals(rentOfficeId))){
-            return rentOffices.stream().filter(rentOffice -> rentOffice.getId().equals(rentOfficeId)).findFirst().get();
-        }
-        // 없는 경우 exception 처리 필요
-        return new RentOffice();
+
+    /**
+     * 자전거 rent 요청
+     */
+    public void rentBike(Bike bike) {
+        User user = new User();
+        user.rentBike(bike);
+        createUser(user);
     }
 
+
+    /**
+     * 자전거 반납
+     */
+    public void returnBike(){
+        for (User user : users) {
+        }
+
+
+    }
 }

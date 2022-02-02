@@ -241,48 +241,7 @@ public class BikeSystemController {
     }
 
 
-    /**
-     * Score API
-     * 해당 Auth key로 획득한 점수를 반환한다. 점수는 높을수록 좋다.
-     * 카카오 T 바이크 서버의 상태가 finished가 아닐 때 본 API를 호출하면 response의 score는 무조건 0.0이다.
-     * <p>
-     * Request
-     * GET /score
-     * Authorization: {auth_key}
-     * Content-Type: application/json
-     * Header
-     * <p>
-     * Name	Description
-     * Authorization	Start API 에서 발급받은 auth_key
-     * Example
-     * <p>
-     * curl -X GET {BASE_URL}/score \
-     * -H 'Authorization: {AUTH_KEY}' \
-     * -H 'Content-Type: application/json'
-     * Response
-     * Key
-     * <p>
-     * Key	Type	Description
-     * score	Float	획득한 점수
-     * Example
-     * <p>
-     * {
-     * "score": 75.7
-     * }
-     * [1]: 실제 카카오 T 바이크에서 사용자는 애플리케이션과 자동 잠금장치를 이용하여 아무 곳에서나 자전거를 대여하고 반납할 수 있으나,
-     * 이번 과제에서는 문제를 간단화하기 위하여 지정된 위치에서만 자전거를 대여하고 반납할 수 있다고 가정한다.
-     */
-    @GetMapping("/score")
-    public ScoreResponseDTO score(HttpServletRequest request, HttpServletResponse response) {
 
-        return bikeSystemService.score();
-    }
-
-    @PostMapping("/rent")
-    public RentResponseDTO rent(@RequestBody Map<String, List> reqDto, HttpServletRequest request, HttpServletResponse response) {
-        return bikeSystemService.rent(reqDto);
-
-    }
 
 
     /**
@@ -294,5 +253,9 @@ public class BikeSystemController {
         앞쪽에 위치한 대여 요청에게 자전거를 빌려주고, 뒤에 있는 대여 요청은 취소한다.
         죠르디의 지시에 따라 트럭을 운행한다.
      */
+    @PostMapping("/rent")
+    public RentResponseDTO rent(@RequestBody Map<String, List> reqDto, HttpServletRequest request, HttpServletResponse response) {
+        return bikeSystemService.rent(reqDto);
 
+    }
 }

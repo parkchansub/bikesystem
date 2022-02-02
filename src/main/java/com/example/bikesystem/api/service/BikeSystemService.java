@@ -60,8 +60,7 @@ public class BikeSystemService {
             for (Object o : list) {
                 System.out.println("time:"+time+" val : "+o);
                 List requestItem = (List) o; /*(빌리는 대여소ID, 반납하는 대여소ID, 빌리는 시간(분))*/
-
-
+                bikeSystemRepository.rent(requestItem, time);
 
 
             }

@@ -88,4 +88,19 @@ public class BikeSystemRepository {
                .system(system)
                .build();
     }
+
+    public void rent(List requestItem, String time) {
+        int rentOfficeId = (int) requestItem.get(0);
+        int returnOfficeId = (int) requestItem.get(1);
+        int returnTime = (int) requestItem.get(2);
+        RentOffice rentOffice = system.findRentOffice(rentOfficeId);
+
+        if (rentOffice.isSatisfiedByRent()) {
+            system.rentBike(rentOffice.rentBike(returnTime, returnOfficeId));
+        }
+        else{
+            system.updateFailRequestCnt(1);
+        }
+
+    }
 }

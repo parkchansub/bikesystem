@@ -25,8 +25,9 @@ public class RentOffice {
         this.yPosition = yPosition;
     }
 
-    public Bike rentBike(){
-        return holdBikeList.get(0);
+    public Bike rentBike(Integer returnTime, Integer returnRentOfficeId){
+
+         return holdBikeList.get(0).rentBike(returnTime,returnRentOfficeId);
     }
 
 
@@ -67,4 +68,10 @@ public class RentOffice {
         return this;
     }
 
+    public void returnBike(Integer serverTime) {
+       /* holdBikeList.stream()
+                .filter(bike -> bike.getRetrunTime().equals(serverTime))
+                .*/
+
+    }
 }
