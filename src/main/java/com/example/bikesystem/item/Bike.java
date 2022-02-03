@@ -1,8 +1,10 @@
 package com.example.bikesystem.item;
 
+import lombok.Getter;
+
 import java.util.UUID;
 
-
+@Getter
 public class Bike {
 
     private String id;

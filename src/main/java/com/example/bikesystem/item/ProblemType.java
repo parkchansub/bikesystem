@@ -1,7 +1,5 @@
 package com.example.bikesystem.item;
 
-import com.example.bikesystem.common.exception.ApiException;
-
 import java.util.Arrays;
 import java.util.Optional;
 

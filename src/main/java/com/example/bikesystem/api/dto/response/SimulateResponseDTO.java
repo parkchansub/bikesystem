@@ -17,7 +17,7 @@ public class SimulateResponseDTO {
 
     @Builder
     public SimulateResponseDTO(BikeSystem system) {
-        this.status = "ready";
+        this.status = system.getServerStatus();
         this.time = system.getServerTime();
         this.failed_requests_count = system.getFailReuqestCnt();
         this.distance = String.valueOf(system.getTruckTotalMoveDistance());

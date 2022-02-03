@@ -161,22 +161,22 @@ public class BikeSystemController {
 
     /**
      * Simulate API
-     * 현재 시각 ~ 현재 시각 + 1분 까지 각 트럭이 행할 명령을 담아 서버에 전달한다. 호출 시 서버에서는 다음과 같은 일이 진행된다.
-     * 카카오 T 바이크 서버의 상태가 in_progress 로 변경된다.
-     * 서버 내부에 기록된 returns(자전거 반납 예정 Hash) 를 확인하여 각 자전거 대여소가 가진 자전거 수를 늘린다.
-     * 서버 내부에 기록된 requests(자전거 대여 예정 Hash) 를 확인하여 각 자전거 대여소가 가진 자전거 수를 줄인다.
-     * 자전거 대여 요청이 취소될 경우 요청 취소 수를 1 증가시켜 서버에 저장한다.
-     * 자전거 대여 요청이 성공할 경우 현재 시각 + 대여 시간 을 key, 반납할 자전거 대여소 ID 를 value로 하여 returns 에 저장한다.
-     * 매개 변수로 받은 트럭의 명령들을 수행한다. 이때 각 시각별로 ID가 낮은 트럭의 명령부터 순서대로 처리한다.
-     * 명령이 자전거 상차 또는 자전거 하차 일 경우 트럭이 가진 자전거 수를 증가 또는 감소시킨다.
-     * 자전거가 없는 대여소에서 상차를 하거나, 트럭에 자전거가 없는데 하차를 하려는 명령은 무시된다. 이때 명령은 무시되지만 시간은 정상적으로 각기 6초가 소비된다.
-     * 명령이 상, 하, 좌, 우 이동일 경우 트럭의 이동 거리를 100m 증가시키고, 트럭의 위치를 기록한다.
-     * 서비스 지역을 벗어나는 이동 명령은 무시된다. 이때 명령은 무시되지만 시간은 정상적으로 각기 6초가 소비된다.
-     * 매개 변수로 받은 명령 중 1분 내에 할 수 있는 명령까지만 수행한다. 즉, 한 번의 simulate 요청 안에서 각 트럭에게 내릴 수 있는 명령 수는 최대 10개이고, 그 이상의 명령은 실행되지 않는다.
-     * Simulate 요청이 성공하면 카카오 T 바이크 서버의 상태가 ready 로 변경되고, 현재 시각이 1분 증가한다.
-     * 한 시나리오에서 Simulate 요청이 720번 성공되면 카카오 T 바이크 서버의 상태는 ready가 아닌 finished로 변경되며, 총점이 반영된다.
-     * 721번 이상도 Simulate 요청을 보낼 순 있으나, 이때의 이동거리 등은 점수에 반영되지 않는다.
-     * 다시 같은 시나리오를 Simulate 하고 싶다면 Start API를 이용해 새로운 AUTH_KEY를 발급받아야 한다.
+     * 1. 현재 시각 ~ 현재 시각 + 1분 까지 각 트럭이 행할 명령을 담아 서버에 전달한다. 호출 시 서버에서는 다음과 같은 일이 진행된다.
+     * 2. 카카오 T 바이크 서버의 상태가 in_progress 로 변경된다.(완료)
+     * 3. 서버 내부에 기록된 returns(자전거 반납 예정 Hash) 를 확인하여 각 자전거 대여소가 가진 자전거 수를 늘린다.(다시 구현 필요)
+     * 4. 서버 내부에 기록된 requests(자전거 대여 예정 Hash) 를 확인하여 각 자전거 대여소가 가진 자전거 수를 줄인다.(다시 구현 필요)
+     * 5. 자전거 대여 요청이 취소될 경우 요청 취소 수를 1 증가시켜 서버에 저장한다.(완료)
+     * 6. 자전거 대여 요청이 성공할 경우 현재 시각 + 대여 시간 을 key, 반납할 자전거 대여소 ID 를 value로 하여 returns 에 저장한다.
+     * 7. 매개 변수로 받은 트럭의 명령들을 수행한다. 이때 각 시각별로 ID가 낮은 트럭의 명령부터 순서대로 처리한다.
+     * 8. 명령이 자전거 상차 또는 자전거 하차 일 경우 트럭이 가진 자전거 수를 증가 또는 감소시킨다.(완료)
+     * 9. 자전거가 없는 대여소에서 상차를 하거나, 트럭에 자전거가 없는데 하차를 하려는 명령은 무시된다. 이때 명령은 무시되지만 시간은 정상적으로 각기 6초가 소비된다.
+     * 10. 명령이 상, 하, 좌, 우 이동일 경우 트럭의 이동 거리를 100m 증가시키고, 트럭의 위치를 기록한다.(완료)
+     * 11. 서비스 지역을 벗어나는 이동 명령은 무시된다. 이때 명령은 무시되지만 시간은 정상적으로 각기 6초가 소비된다.
+     * 12. 매개 변수로 받은 명령 중 1분 내에 할 수 있는 명령까지만 수행한다. 즉, 한 번의 simulate 요청 안에서 각 트럭에게 내릴 수 있는 명령 수는 최대 10개이고, 그 이상의 명령은 실행되지 않는다.
+     *     * Simulate 요청이 성공하면 카카오 T 바이크 서버의 상태가 ready 로 변경되고, 현재 시각이 1분 증가한다.
+     * 13. 한 시나리오에서 Simulate 요청이 720번 성공되면 카카오 T 바이크 서버의 상태는 ready가 아닌 finished로 변경되며, 총점이 반영된다.
+     * 14. 721번 이상도 Simulate 요청을 보낼 순 있으나, 이때의 이동거리 등은 점수에 반영되지 않는다.
+     * 15. 다시 같은 시나리오를 Simulate 하고 싶다면 Start API를 이용해 새로운 AUTH_KEY를 발급받아야 한다.
      * <p>
      * Request
      * PUT /simulate
@@ -237,11 +237,9 @@ public class BikeSystemController {
     @PutMapping("/simulate")
     public SimulateResponseDTO simulate(@RequestBody SimulateRequestDTO reqDto, HttpServletRequest request, HttpServletResponse response) {
 
+
         return bikeSystemService.simulate(reqDto);
     }
-
-
-
 
 
     /**
@@ -255,7 +253,9 @@ public class BikeSystemController {
      */
     @PostMapping("/rent")
     public RentResponseDTO rent(@RequestBody Map<String, List> reqDto, HttpServletRequest request, HttpServletResponse response) {
+
         return bikeSystemService.rent(reqDto);
 
     }
+
 }

@@ -23,14 +23,22 @@ public class ActionItem {
 
     }
 
+    /**
+     * 트럭 이동 요청 명령 실행
+     * @param range
+     * @return
+     */
     public ActionItem moveCommand(int range){
         truck.moveCammand(range);
         return this;
     }
 
-
+    /**
+     * 트럭 자전거 하차
+     * @return ActionItem
+     */
     public ActionItem dropBike(){
-        if(truck.isSatisfiedByDropBike()){
+        if(truck.isSatisfiedByLoadBike()){
             rentOffice.getBike(truck.dropBike());
         }else{
             truck.addFailReqCnt();
@@ -39,11 +47,12 @@ public class ActionItem {
     }
 
 
-
-
+    /**
+     * 트럭 자전거 상차
+     * @return ActionItem
+     */
     public ActionItem loadBike(){
-
-        if(this.rentOffice.isSatisfiedByLostBike()){
+        if(this.rentOffice.isSatisfiedByLoadBike()){
             truck.loadBike(this.rentOffice.lostBike());
         }else{
             truck.addFailReqCnt();

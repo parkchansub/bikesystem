@@ -13,10 +13,6 @@ public class RentOffice {
     private int yPosition;
 
 
-    public RentOffice() {
-    }
-
-
     public RentOffice(List<Bike> bikes, int seq,int xPosition, int yPosition) {
         this.id = UUID.randomUUID().toString();
         holdBikeList = bikes;
@@ -30,15 +26,6 @@ public class RentOffice {
          return holdBikeList.get(0).rentBike(returnTime,returnRentOfficeId);
     }
 
-
-    public boolean isSatisfiedByRent(){
-        return holdBikeList.size()> 0 ?  true : false;
-    }
-
-    public String getId() {
-        return id;
-    }
-
     public int getSeq() {
         return seq;
     }
@@ -48,8 +35,7 @@ public class RentOffice {
     }
 
 
-
-    public boolean isSatisfiedByLostBike(){
+    public boolean isSatisfiedByLoadBike(){
         return holdBikeList.size()>0 ? true : false;
     }
 
@@ -61,17 +47,13 @@ public class RentOffice {
     }
 
 
-
-
     public RentOffice getBike(Bike bike){
         holdBikeList.add(bike);
         return this;
     }
 
-    public void returnBike(Integer serverTime) {
-       /* holdBikeList.stream()
-                .filter(bike -> bike.getRetrunTime().equals(serverTime))
-                .*/
-
+    public void returnBike(User user) {
+        getBike(user.getRentBike());
+        user.returnBike();
     }
 }

@@ -27,9 +27,6 @@ public class BikeSystemService {
         return bikeSystemRepository.startBikeSystem(problemType.get());
     }
 
-
-
-
     public LocationsResponseDTO getLocationInfo(String authorization) {
 
         return bikeSystemRepository.getLocationInfo(authorization);
@@ -43,28 +40,17 @@ public class BikeSystemService {
         return bikeSystemRepository.simulate(reqDto);
     }
 
-    public ScoreResponseDTO score() {
-
-
-        return null;
-    }
-
 
     public RentResponseDTO rent(Map<String, List> reqDto) {
-
-
         for (String time : reqDto.keySet()) {
-
-            List list = reqDto.get(time);
-
-            for (Object o : list) {
-                System.out.println("time:"+time+" val : "+o);
-                List requestItem = (List) o; /*(빌리는 대여소ID, 반납하는 대여소ID, 빌리는 시간(분))*/
-                bikeSystemRepository.rent(requestItem, time);
-
-
+            if(bikeSystemRepository.checkServerTime(time)){
+                List list = reqDto.get(time);
+                for (Object o : list) {
+                    /*(빌리는 대여소ID, 반납하는 대여소ID, 빌리는 시간(분))*/
+                    List requestItem = (List) o;
+                    bikeSystemRepository.rent(requestItem);
+                }
             }
-
         }
         return new RentResponseDTO();
     }

@@ -13,13 +13,16 @@ public class BikeSystem {
     /*초기 자전거 수*/
     private final int INITBIKECNT;
 
+    /*대여소 장소 x축 최대 길이*/
     private final int XRANGE;
+
+    /*대여소 장소 y축 최대 길이*/
     private final int YRANGE;
 
     /*대여소*/
     private List<RentOffice> rentOffices;
 
-    /**/
+    /*시스템 사용자*/
     private List<User> users;
 
     /*트럭*/
@@ -37,6 +40,21 @@ public class BikeSystem {
     /*요청 실패 건수*/
     private int failReuqestCnt;
 
+    public int getTruckTotalMoveDistance() {
+        return truckTotalMoveDistance;
+    }
+
+    public int getFailReuqestCnt() {
+        return failReuqestCnt;
+    }
+
+    public Integer getServerTime() {
+        return serverTime;
+    }
+
+    public String getServerStatus() {
+        return serverStatus;
+    }
 
     public BikeSystem(ProblemType problemType) {
 
@@ -118,13 +136,18 @@ public class BikeSystem {
     /**
      * 서버에 등록된 특정 대여소 검색
      * @param rentOfficeSeq
-     * @return
+     * @return RentOffice
      */
     public RentOffice findRentOffice(int rentOfficeSeq){
         return rentOffices.get(rentOfficeSeq);
     }
 
 
+    /**
+     * 시스템 트럭 및 대여소 정보 수정
+     * @param actionItem
+     * @return BikeSystem
+     */
     public BikeSystem updateBikeSystem(ActionItem actionItem) {
 
         Truck modifyTruck = actionItem.getTruck();
@@ -138,25 +161,32 @@ public class BikeSystem {
         return this;
     }
 
+    /**
+     * 대여 요청 실패시 시스템 실패 건수 수정
+     * @param failCnt
+     */
     public void updateFailRequestCnt(int failCnt){
         this.failReuqestCnt = this.failReuqestCnt + failCnt;
     }
 
-    public int getTruckTotalMoveDistance() {
-        return truckTotalMoveDistance;
-    }
-
-    public int getFailReuqestCnt() {
-        return failReuqestCnt;
-    }
-
-
+    /**
+     * 서버시간 경과
+     * */
     public void sendTime(){
         this.serverTime = this.serverTime + 1;
     }
 
-    public Integer getServerTime() {
-        return serverTime;
+
+    /**
+     * 자전거 반납
+     */
+    public void returnBike(){
+        List<User> userList = (List<User>) users.stream()
+                .filter(user -> user.getRentBike().getRetrunTime().equals(serverTime));
+
+        for (User user : userList) {
+            findRentOffice(user.getRentBike().getReturnRentOfficeId()).returnBike(user);
+        }
     }
 
 
@@ -170,13 +200,12 @@ public class BikeSystem {
     }
 
 
-    /**
-     * 자전거 반납
-     */
-    public void returnBike(){
-        for (User user : users) {
-        }
-
-
+    public void systemProgress(){
+        this.serverStatus = "in_progress";
     }
+
+
+
+
+
 }

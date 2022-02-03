@@ -1,14 +1,12 @@
 package com.example.bikesystem.item;
 
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.function.Function;
 
 /**
  *  0: 6초간 아무것도 하지 않음
  *  1: 위로 한 칸 이동 -> 해당 트럭 객체의 locationId 변경(이동가능한지 여부 체크)
- *
  *  2: 오른쪽으로 한 칸 이동
  *  3: 아래로 한 칸 이동
  *  4: 왼쪽으로 한 칸 이동

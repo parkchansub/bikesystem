@@ -21,7 +21,11 @@ public class BikeSystemRepository {
     private BikeSystem system;
     private List<String> authKeyList;
 
-
+    /**
+     * 서버 실행
+     * @param problemType
+     * @return SystemStartResponseDTO
+     */
     public SystemStartResponseDTO startBikeSystem(ProblemType problemType) {
         this.authKeyList = new ArrayList<>();
         this.system = new BikeSystem(problemType);
@@ -34,6 +38,7 @@ public class BikeSystemRepository {
                 .problem(problemType.getProblemNum())
                 .build();
     }
+
 
     private void checkAuthCheck(String authorization) {
         if(!authKeyList.contains(authorization)){
@@ -49,14 +54,22 @@ public class BikeSystemRepository {
     }
 
 
-
+    /**
+     * 시스템 대여소 정보 조회
+     * @param authorization
+     * @return LocationsResponseDTO
+     */
     public LocationsResponseDTO getLocationInfo(String authorization) {
-
         checkAuthCheck(authorization);
         return new LocationsResponseDTO(this.system.getRentOffices());
 
     }
 
+    /**
+     * 시스템 트럭 정보 조회
+     * @param authorization
+     * @return TruckResponseDTO
+     */
     public TruckResponseDTO getTrucksInfo(String authorization) {
         checkAuthCheck(authorization);
 
@@ -65,6 +78,9 @@ public class BikeSystemRepository {
 
 
     public SimulateResponseDTO simulate(SimulateRequestDTO reqDto) {
+
+        system.systemProgress();
+        system.returnBike();
 
         ActionItem resultItem;
         for (Command command : reqDto.getCommands()) {
@@ -89,18 +105,32 @@ public class BikeSystemRepository {
                .build();
     }
 
-    public void rent(List requestItem, String time) {
+    /**
+     * 자전거 대여 요청
+     * @param requestItem
+     */
+    public void rent(List requestItem) {
         int rentOfficeId = (int) requestItem.get(0);
         int returnOfficeId = (int) requestItem.get(1);
         int returnTime = (int) requestItem.get(2);
+
         RentOffice rentOffice = system.findRentOffice(rentOfficeId);
 
-        if (rentOffice.isSatisfiedByRent()) {
+        if (rentOffice.isSatisfiedByLoadBike()) {
             system.rentBike(rentOffice.rentBike(returnTime, returnOfficeId));
         }
         else{
             system.updateFailRequestCnt(1);
         }
 
+    }
+
+    /**
+     * 요청 시간과 서버시간 비교
+     * @param time
+     * @return boolean
+     */
+    public boolean checkServerTime(String time) {
+        return system.getServerTime().equals(time);
     }
 }
