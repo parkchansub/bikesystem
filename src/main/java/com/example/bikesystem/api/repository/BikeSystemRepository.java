@@ -85,16 +85,19 @@ public class BikeSystemRepository {
         ActionItem resultItem;
         for (Command command : reqDto.getCommands()) {
 
-            resultItem = new ActionItem(system.findRentOffice(command.getTruck_id()), system.findTruckInfo(command.getTruck_id()));
+            Truck truckInfo = system.findTruckInfo(command.getTruck_id());
+            resultItem = new ActionItem(system.findRentOffice(command.getTruck_id()), truckInfo);
             for (Integer integer : command.getCommand()) {
                 TruckMoveType truckMoveType = TruckMoveType.findTruckMoveType(integer);
 
-                resultItem = truckMoveType.getTruckInfo(ActionItem.builder()
-                        .truck(resultItem.getTruck())
-                        .rentOffice(system.findRentOffice(resultItem.getTruck().getLocationId()))
+                resultItem = (ActionItem) truckMoveType.getTruckInfo(ActionItem.builder()
+                        .truck(truckInfo)
+                        .rentOffice(system.findRentOffice(truckInfo.getLocationId()))
                         .build());
+
+                system.updateBikeSystemRentOffice(resultItem);
             }
-            system.updateBikeSystem(resultItem);
+            system.updateBikeSystemTruckInfo(truckInfo);
         }
 
         system.sendTime();
@@ -104,6 +107,7 @@ public class BikeSystemRepository {
                .system(system)
                .build();
     }
+
 
     /**
      * 자전거 대여 요청

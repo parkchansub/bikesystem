@@ -10,16 +10,10 @@ public class ActionItem {
     private RentOffice rentOffice;
     private Truck truck;
 
-    private int xRange;
-    private int yRange;
-
     @Builder
     public ActionItem(RentOffice rentOffice, Truck truck) {
         this.rentOffice = rentOffice;
         this.truck = truck;
-
-        this.xRange = truck.getXRange();
-        this.yRange = truck.getYRange();
 
     }
 

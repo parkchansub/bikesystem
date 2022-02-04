@@ -25,6 +25,7 @@ public class Truck {
     private int yRange;
 
     private final int COMMANDPROCESSSECONDS = 6;
+    private final int COMMANDPROCESSDISTANCE = 100;
 
 
 
@@ -64,9 +65,9 @@ public class Truck {
      * @param range
      */
     public void moveCammand(int range){
-        if(this.locationId + range > 0){
+        if(this.locationId + range >-1){
             this.locationId = this.locationId + range;
-            this.moveDistance = this.moveDistance+100;
+            this.moveDistance = this.moveDistance+COMMANDPROCESSDISTANCE;
         }
         passMoveSeconds();
     }
@@ -86,6 +87,7 @@ public class Truck {
      */
     public void loadBike(Bike bike){
         bikeList.add(bike);
+        passMoveSeconds();
     }
 
 
@@ -96,8 +98,13 @@ public class Truck {
     public Bike dropBike() {
         Bike bike = bikeList.get(0);
         bikeList.remove(bike);
-
+        passMoveSeconds();
         return bike;
+    }
+
+
+    public void initMoveSeconds(){
+        this.moveSeconds = 0;
     }
 
 }

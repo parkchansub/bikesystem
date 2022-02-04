@@ -17,9 +17,9 @@ public enum TruckMoveType {
 
     STOP(0, actionItem -> actionItem),
     MOVEUP(1, actionItem -> actionItem.moveCommand(1)),
-    MOVERIGHT(2, actionItem -> actionItem.moveCommand(actionItem.getYRange())),
+    MOVERIGHT(2, actionItem -> actionItem.moveCommand(actionItem.getTruck().getYRange())),
     MOVEDOWN(3, actionItem -> actionItem.moveCommand(-1)),
-    MOVELEFT(4, actionItem -> actionItem.moveCommand(-actionItem.getYRange())),
+    MOVELEFT(4, actionItem -> actionItem.moveCommand(-actionItem.getTruck().getYRange())),
     LOADBIKE(5, actionItem -> actionItem.loadBike()),
     DROPBIKE(6, actionItem -> actionItem.dropBike());
 
@@ -31,7 +31,7 @@ public enum TruckMoveType {
         this.expression = expression;
     }
 
-    public ActionItem getTruckInfo(ActionItem actionItem){
+    public Object getTruckInfo(ActionItem actionItem){
         return expression.apply(actionItem);
     }
 

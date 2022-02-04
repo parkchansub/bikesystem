@@ -41,6 +41,9 @@ public class BikeSystem {
     private int failReuqestCnt;
 
     public int getTruckTotalMoveDistance() {
+
+        truckTotalMoveDistance = trucks.stream().mapToInt(truck -> truck.getMoveDistance()).sum();
+
         return truckTotalMoveDistance;
     }
 
@@ -130,7 +133,10 @@ public class BikeSystem {
      * @return
      */
     public Truck findTruckInfo(int truckSeq){
-        return trucks.get(truckSeq);
+        Truck truck = trucks.get(truckSeq);
+        truck.initMoveSeconds();
+
+        return truck;
     }
 
     /**
@@ -148,17 +154,17 @@ public class BikeSystem {
      * @param actionItem
      * @return BikeSystem
      */
-    public BikeSystem updateBikeSystem(ActionItem actionItem) {
+    public void updateBikeSystemRentOffice(ActionItem actionItem) {
 
-        Truck modifyTruck = actionItem.getTruck();
         RentOffice modifyRentOffice = actionItem.getRentOffice();
-
-        trucks.set(modifyTruck.getSeq(), modifyTruck);
         rentOffices.set(modifyRentOffice.getSeq(), modifyRentOffice);
 
-        this.truckTotalMoveDistance = this.truckTotalMoveDistance+modifyTruck.getMoveDistance();
-        updateFailRequestCnt(modifyTruck.getFailRequestCnt());
-        return this;
+    }
+
+    public void updateBikeSystemTruckInfo(Truck truck){
+        trucks.set(truck.getSeq(), truck);
+
+        updateFailRequestCnt(truck.getFailRequestCnt());
     }
 
     /**
@@ -181,11 +187,15 @@ public class BikeSystem {
      * 자전거 반납
      */
     public void returnBike(){
-        List<User> userList = (List<User>) users.stream()
-                .filter(user -> user.getRentBike().getRetrunTime().equals(serverTime));
 
-        for (User user : userList) {
-            findRentOffice(user.getRentBike().getReturnRentOfficeId()).returnBike(user);
+        if(users.size()>0){
+            List<User> userList = (List<User>) users.stream()
+                    .filter(user -> user.getRentBike().getRetrunTime().equals(serverTime));
+
+            for (User user : userList) {
+                findRentOffice(user.getRentBike().getReturnRentOfficeId()).returnBike(user);
+            }
+
         }
     }
 
@@ -203,7 +213,6 @@ public class BikeSystem {
     public void systemProgress(){
         this.serverStatus = "in_progress";
     }
-
 
 
 
