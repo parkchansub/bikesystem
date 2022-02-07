@@ -12,8 +12,6 @@ public class SimulateResponseDTO {
     private Integer failed_requests_count;
     private String distance;
 
-    public SimulateResponseDTO() {
-    }
 
     @Builder
     public SimulateResponseDTO(BikeSystem system) {

@@ -80,7 +80,6 @@ public class BikeSystemRepository {
     public SimulateResponseDTO simulate(SimulateRequestDTO reqDto) {
 
         system.systemProgress();
-        system.returnBike();
 
         ActionItem resultItem;
         for (Command command : reqDto.getCommands()) {
@@ -100,12 +99,21 @@ public class BikeSystemRepository {
             system.updateBikeSystemTruckInfo(truckInfo);
         }
 
-        system.sendTime();
+
 
 
        return SimulateResponseDTO.builder()
                .system(system)
                .build();
+    }
+
+    public void returnBike(Integer time) {
+        system.returnBike(time);
+
+    }
+
+    public void sendServerTime() {
+        system.sendTime();
     }
 
 
@@ -134,7 +142,13 @@ public class BikeSystemRepository {
      * @param time
      * @return boolean
      */
-    public boolean checkServerTime(String time) {
+    public boolean checkServerTime(Integer time) {
+
         return system.getServerTime().equals(time);
+    }
+
+
+    public BikeSystem getSystemInfo(){
+        return this.system;
     }
 }

@@ -163,7 +163,6 @@ public class BikeSystem {
 
     public void updateBikeSystemTruckInfo(Truck truck){
         trucks.set(truck.getSeq(), truck);
-
         updateFailRequestCnt(truck.getFailRequestCnt());
     }
 
@@ -185,17 +184,25 @@ public class BikeSystem {
 
     /**
      * 자전거 반납
+     * @param time
      */
-    public void returnBike(){
+    public void returnBike(Integer time){
 
-        if(users.size()>0){
-            List<User> userList = (List<User>) users.stream()
-                    .filter(user -> user.getRentBike().getRetrunTime().equals(serverTime));
+        if(serverTime.equals(time)){
+            if(users.size()>0){
+                List<User> userList = (List<User>) users.stream()
+                        .filter(user -> user.getRentBike().getRetrunTime().equals(serverTime));
 
-            for (User user : userList) {
-                findRentOffice(user.getRentBike().getReturnRentOfficeId()).returnBike(user);
+
+                System.out.println(userList.toArray());
+
+                for (User user : userList) {
+                    findRentOffice(user.getRentBike().getReturnRentOfficeId()).returnBike(user);
+
+                    users.remove(user);
+                }
+
             }
-
         }
     }
 
@@ -207,6 +214,8 @@ public class BikeSystem {
         User user = new User();
         user.rentBike(bike);
         createUser(user);
+
+
     }
 
 

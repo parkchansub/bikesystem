@@ -20,6 +20,7 @@ public class LocationsResponseDTO {
             locations.add(LocationDTO.builder()
                     .id(rentoffice.getSeq())
                     .located_bikes_count(rentoffice.getLocatedBikesCnt())
+                    .located_request_sucess_count(rentoffice.getRequestCount())
                     .build());
 
         }

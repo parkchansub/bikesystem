@@ -3,6 +3,7 @@ package com.example.bikesystem.api.service;
 import com.example.bikesystem.api.dto.request.SimulateRequestDTO;
 import com.example.bikesystem.api.dto.response.*;
 import com.example.bikesystem.common.exception.ApiException;
+import com.example.bikesystem.item.BikeSystem;
 import com.example.bikesystem.item.ProblemType;
 import com.example.bikesystem.api.repository.BikeSystemRepository;
 import lombok.RequiredArgsConstructor;
@@ -42,16 +43,35 @@ public class BikeSystemService {
 
 
     public RentResponseDTO rent(Map<String, List> reqDto) {
+
+
         for (String time : reqDto.keySet()) {
-            if(bikeSystemRepository.checkServerTime(time)){
+            Integer requestTime = Integer.valueOf(time);
+            bikeSystemRepository.returnBike(requestTime);
+
+            List list = reqDto.get(time);
+            for (Object o : list) {
+                /*(빌리는 대여소ID, 반납하는 대여소ID, 빌리는 시간(분))*/
+                List requestItem = (List) o;
+                bikeSystemRepository.rent(requestItem);
+            }
+
+
+  /*          if(bikeSystemRepository.checkServerTime(requestTime)){
                 List list = reqDto.get(time);
                 for (Object o : list) {
-                    /*(빌리는 대여소ID, 반납하는 대여소ID, 빌리는 시간(분))*/
+                    *//*(빌리는 대여소ID, 반납하는 대여소ID, 빌리는 시간(분))*//*
                     List requestItem = (List) o;
                     bikeSystemRepository.rent(requestItem);
                 }
-            }
+            }else{
+                bikeSystemRepository.sendServerTime();
+            }*/
+
         }
-        return new RentResponseDTO();
+
+        return RentResponseDTO.builder()
+                .system(bikeSystemRepository.getSystemInfo())
+                .build();
     }
 }
