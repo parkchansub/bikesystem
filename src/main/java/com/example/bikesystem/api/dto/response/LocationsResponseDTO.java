@@ -11,6 +11,7 @@ import java.util.List;
 public class LocationsResponseDTO {
 
     private List<LocationDTO> locations;
+    private int totalRequestCnt;
 
     public LocationsResponseDTO(List<RentOffice> rentoffices) {
         this.locations = new ArrayList<>();
@@ -24,5 +25,7 @@ public class LocationsResponseDTO {
                     .build());
 
         }
+
+        this.totalRequestCnt = locations.stream().mapToInt(location -> location.getLocated_request_sucess_count()).sum();
     }
 }

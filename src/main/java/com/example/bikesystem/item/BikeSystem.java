@@ -1,7 +1,9 @@
 package com.example.bikesystem.item;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -27,6 +29,13 @@ public class BikeSystem {
 
     /*트럭*/
     private List<Truck> trucks;
+
+    /*반납 예정 자전거 hash*/
+    private Map<String,List<Bike>> returnList;
+
+    /*대여 예정 자전거 hash*/
+    private Map<String,List<Bike>> rentList;
+
 
     /*서버 상태*/
     private String serverStatus;
@@ -64,6 +73,9 @@ public class BikeSystem {
         this.users = new ArrayList<>();
         this.rentOffices = new ArrayList<>();
         this.trucks = new ArrayList<>();
+
+        this.rentList = new HashMap<>();
+        this.returnList = new HashMap<>();
 
         this.TRUCKCNT = problemType.getTruckCnt();
         this.INITBIKECNT = problemType.getInitBikeCnt();
@@ -190,11 +202,13 @@ public class BikeSystem {
 
         if(serverTime.equals(time)){
             if(users.size()>0){
+
+
                 List<User> userList = (List<User>) users.stream()
                         .filter(user -> user.getRentBike().getRetrunTime().equals(serverTime));
 
 
-                System.out.println(userList.toArray());
+
 
                 for (User user : userList) {
                     findRentOffice(user.getRentBike().getReturnRentOfficeId()).returnBike(user);
@@ -216,6 +230,26 @@ public class BikeSystem {
         createUser(user);
 
 
+    }
+
+
+    public void returnBike2(List returnList){
+
+        Map<String, List<Bike>> returnMap = new HashMap<>();
+        for (Object o : returnList) {
+            List returnReq = (List) o;
+            Bike bike = new Bike();
+
+            int returnOfficeId = (int) returnReq.get(1);
+            int returnTime = (int) returnReq.get(2);
+
+
+
+            bike.rentBike(returnTime, returnOfficeId);
+
+
+
+        }
     }
 
 

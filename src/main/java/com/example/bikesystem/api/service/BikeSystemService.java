@@ -55,23 +55,24 @@ public class BikeSystemService {
                 List requestItem = (List) o;
                 bikeSystemRepository.rent(requestItem);
             }
-
-
-  /*          if(bikeSystemRepository.checkServerTime(requestTime)){
-                List list = reqDto.get(time);
-                for (Object o : list) {
-                    *//*(빌리는 대여소ID, 반납하는 대여소ID, 빌리는 시간(분))*//*
-                    List requestItem = (List) o;
-                    bikeSystemRepository.rent(requestItem);
-                }
-            }else{
-                bikeSystemRepository.sendServerTime();
-            }*/
-
         }
-
         return RentResponseDTO.builder()
                 .system(bikeSystemRepository.getSystemInfo())
                 .build();
+    }
+
+
+    public void requestRent(Map<String, List> reqDto) {
+
+
+        for (String time : reqDto.keySet()) {
+            Integer requestTime = Integer.valueOf(time);
+            List list = reqDto.get(time);
+            bikeSystemRepository.returnBike2(list);
+
+
+
+        }
+
     }
 }

@@ -96,7 +96,7 @@ public class BikeSystemRepository {
 
                 system.updateBikeSystemRentOffice(resultItem);
             }
-            system.updateBikeSystemTruckInfo(truckInfo);
+            //system.updateBikeSystemTruckInfo(truckInfo);
         }
 
 
@@ -150,5 +150,9 @@ public class BikeSystemRepository {
 
     public BikeSystem getSystemInfo(){
         return this.system;
+    }
+
+    public void returnBike2(List list) {
+
     }
 }
