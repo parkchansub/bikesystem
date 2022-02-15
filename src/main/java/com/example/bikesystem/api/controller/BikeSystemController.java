@@ -421,6 +421,17 @@ public class BikeSystemController {
      * @param response
      * @return
      */
+
+
+    /**
+     * 1. 시간(key) , 자전거리스트(value) 분해 작업
+     * 2. 요청 시간 기준을 key로 자전거리스트(Value)로 Map 구성
+     * 3. 자전거에 반납 시간 Key 기준으로 자전거 리스트(value)로 Map 구성
+     * @param reqDto
+     * @param request
+     * @param response
+     * @return
+     */
     @PostMapping("/rent")
     public RentResponseDTO rent(@RequestBody Map<String, List> reqDto, HttpServletRequest request, HttpServletResponse response) {
 

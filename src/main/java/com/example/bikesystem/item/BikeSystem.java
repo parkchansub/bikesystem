@@ -31,7 +31,7 @@ public class BikeSystem {
     private List<Truck> trucks;
 
     /*반납 예정 자전거 hash*/
-    private Map<String,List<Bike>> returnList;
+    private Map<String,List<Bike>> returnBikeMap;
 
     /*대여 예정 자전거 hash*/
     private Map<String,List<Bike>> rentList;
@@ -75,7 +75,7 @@ public class BikeSystem {
         this.trucks = new ArrayList<>();
 
         this.rentList = new HashMap<>();
-        this.returnList = new HashMap<>();
+        this.returnBikeMap = new HashMap<>();
 
         this.TRUCKCNT = problemType.getTruckCnt();
         this.INITBIKECNT = problemType.getInitBikeCnt();
@@ -207,9 +207,6 @@ public class BikeSystem {
                 List<User> userList = (List<User>) users.stream()
                         .filter(user -> user.getRentBike().getRetrunTime().equals(serverTime));
 
-
-
-
                 for (User user : userList) {
                     findRentOffice(user.getRentBike().getReturnRentOfficeId()).returnBike(user);
 
@@ -230,26 +227,38 @@ public class BikeSystem {
         createUser(user);
 
 
+        addReturnBikeMap(bike);
+
+
+
+
     }
 
+    private void addReturnBikeMap(Bike bike) {
 
-    public void returnBike2(List returnList){
+        String retrunTime = String.valueOf(bike.getRetrunTime());
 
-        Map<String, List<Bike>> returnMap = new HashMap<>();
-        for (Object o : returnList) {
-            List returnReq = (List) o;
-            Bike bike = new Bike();
-
-            int returnOfficeId = (int) returnReq.get(1);
-            int returnTime = (int) returnReq.get(2);
-
-
-
-            bike.rentBike(returnTime, returnOfficeId);
-
-
+        if(returnBikeMap.containsKey(retrunTime)){
+            List<Bike> bikes = returnBikeMap.get(retrunTime);
+             bikes.add(bike);
+             returnBikeMap.put(retrunTime, bikes);
 
         }
+    }
+
+    /**
+     * 반납 로직
+     * 1. returnBikeMap 요청 시간에 반납해야 하는 자전거 정보를 return 하면서 해당 List<bike></bike> 삭제
+     * 2. return 받은 자전거의 returnOfficeId 기준으로 대여소를 찾음
+     * 3. 찾은 대여소에 해당 bike를 add 함
+     * @param time
+     */
+    public void returnBike2(String time){
+
+        if(returnBikeMap.containsKey(time)){
+            returnBikeMap.get(time);
+        }
+
     }
 
 

@@ -46,11 +46,14 @@ public class BikeSystemService {
 
 
         for (String time : reqDto.keySet()) {
+            /*요청 시간*/
             Integer requestTime = Integer.valueOf(time);
             bikeSystemRepository.returnBike(requestTime);
 
+            /*자전거 리스트*/
             List list = reqDto.get(time);
             for (Object o : list) {
+
                 /*(빌리는 대여소ID, 반납하는 대여소ID, 빌리는 시간(분))*/
                 List requestItem = (List) o;
                 bikeSystemRepository.rent(requestItem);
