@@ -21,6 +21,11 @@ public class BikeSystemRepository {
     private BikeSystem system;
     private List<String> authKeyList;
 
+
+    public BikeSystem getSystem() {
+        return system;
+    }
+
     /**
      * 서버 실행
      * @param problemType
@@ -127,7 +132,6 @@ public class BikeSystemRepository {
         int returnTime = (int) requestItem.get(2);
 
         RentOffice rentOffice = system.findRentOffice(rentOfficeId);
-
         if (rentOffice.isSatisfiedByLoadBike()) {
             Bike bike = rentOffice.rentBike(returnTime, returnOfficeId);
             system.rentBike(bike);
@@ -138,16 +142,6 @@ public class BikeSystemRepository {
 
     }
 
-
-    public void rent2(List requestItem) {
-        int rentOfficeId = (int) requestItem.get(0);
-        int returnOfficeId = (int) requestItem.get(1);
-        int returnTime = (int) requestItem.get(2);
-
-        /**/
-
-
-    }
 
     /**
      * 요청 시간과 서버시간 비교
@@ -166,5 +160,33 @@ public class BikeSystemRepository {
 
     public void returnBike2(List list) {
 
+    }
+
+
+    /**
+     * 시간대 별 요청 bike 객체 생성 하여 대여 및 반납 map 함목 추가
+     * @param rentRequests
+     * @param requestTime
+     */
+    public void createRequestMap(List rentRequests, String requestTime) {
+
+        List<Bike> bikes = new ArrayList<>();
+
+
+        for (Object rentRequest : rentRequests) {
+            /*(빌리는 대여소ID, 반납하는 대여소ID, 빌리는 시간(분))*/
+            List requestItem = (List) rentRequest;
+
+            Bike bike = Bike.builder()
+                    .rentRentOfficeId((int) requestItem.get(0))
+                    .returnRentOfficeId((int) requestItem.get(1))
+                    .retrunTime((int) requestItem.get(2))
+                    .build();
+
+            system.addReturnBike(requestTime, bike);
+            bikes.add(bike);
+        }
+
+        system.addRentBike(requestTime, bikes);
     }
 }

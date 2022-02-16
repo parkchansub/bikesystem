@@ -34,7 +34,7 @@ public class BikeSystem {
     private Map<String,List<Bike>> returnBikeMap;
 
     /*대여 예정 자전거 hash*/
-    private Map<String,List<Bike>> rentList;
+    private Map<String,List<Bike>> rentBikeMap;
 
 
     /*서버 상태*/
@@ -48,6 +48,15 @@ public class BikeSystem {
 
     /*요청 실패 건수*/
     private int failReuqestCnt;
+
+
+    public Map<String, List<Bike>> getReturnBikeMap() {
+        return returnBikeMap;
+    }
+
+    public Map<String, List<Bike>> getRentBikeMap() {
+        return rentBikeMap;
+    }
 
     public int getTruckTotalMoveDistance() {
 
@@ -74,7 +83,7 @@ public class BikeSystem {
         this.rentOffices = new ArrayList<>();
         this.trucks = new ArrayList<>();
 
-        this.rentList = new HashMap<>();
+        this.rentBikeMap = new HashMap<>();
         this.returnBikeMap = new HashMap<>();
 
         this.TRUCKCNT = problemType.getTruckCnt();
@@ -225,8 +234,6 @@ public class BikeSystem {
         User user = new User();
         user.rentBike(bike);
         createUser(user);
-
-
         addReturnBikeMap(bike);
 
 
@@ -236,13 +243,12 @@ public class BikeSystem {
 
     private void addReturnBikeMap(Bike bike) {
 
-        String retrunTime = String.valueOf(bike.getRetrunTime());
+        String returnTime = String.valueOf(bike.getRetrunTime());
 
-        if(returnBikeMap.containsKey(retrunTime)){
-            List<Bike> bikes = returnBikeMap.get(retrunTime);
+        if(returnBikeMap.containsKey(returnTime)){
+            List<Bike> bikes = returnBikeMap.get(returnTime);
              bikes.add(bike);
-             returnBikeMap.put(retrunTime, bikes);
-
+             returnBikeMap.put(returnTime, bikes);
         }
     }
 
@@ -267,6 +273,30 @@ public class BikeSystem {
     }
 
 
+    /**
+     * 대여 요청 Map 시간대별 자전거 add
+     * @param requestTime
+     * @param bikes
+     */
+    public void addRentBike(String requestTime, List<Bike> bikes){
+        rentBikeMap.put(requestTime, bikes);
+    }
 
+    /**
+     * 반납 예정 자전거 Map 자전거 add
+     * @param requestTime
+     * @param bike
+     */
+    public void addReturnBike(String requestTime, Bike bike) {
+
+        String returnTime = String.valueOf(bike.getRetrunTime());
+        List<Bike> returnBikes = new ArrayList<>();
+
+        if (returnBikeMap.containsKey(requestTime)) {
+            returnBikes = returnBikeMap.get(requestTime);
+        }
+        returnBikes.add(bike);
+        returnBikeMap.put(returnTime, returnBikes);
+    }
 
 }

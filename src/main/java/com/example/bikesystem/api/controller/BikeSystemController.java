@@ -432,6 +432,17 @@ public class BikeSystemController {
      * @param response
      * @return
      */
+
+    @PostMapping("/pastRentRequests")
+    public PastRentResponseDTO pastRentRequests(@RequestBody Map<String, List> reqDto, HttpServletRequest request, HttpServletResponse response) {
+
+        return bikeSystemService.createRequestMap(reqDto);
+
+    }
+
+
+
+
     @PostMapping("/rent")
     public RentResponseDTO rent(@RequestBody Map<String, List> reqDto, HttpServletRequest request, HttpServletResponse response) {
 

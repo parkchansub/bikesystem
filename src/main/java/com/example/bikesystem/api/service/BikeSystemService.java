@@ -65,17 +65,21 @@ public class BikeSystemService {
     }
 
 
-    public void requestRent(Map<String, List> reqDto) {
 
+    public PastRentResponseDTO createRequestMap(Map<String, List> reqDto) {
 
         for (String time : reqDto.keySet()) {
-            Integer requestTime = Integer.valueOf(time);
-            List list = reqDto.get(time);
-            bikeSystemRepository.returnBike2(list);
-
-
-
+            /*요청 시간에 들어온 rent 요청*/
+            List rentRequsets = reqDto.get(time);
+            bikeSystemRepository.createRequestMap(rentRequsets, time);
         }
+
+        BikeSystem system = bikeSystemRepository.getSystem();
+
+        return PastRentResponseDTO.builder()
+                .rentBikeMap(system.getRentBikeMap())
+                .returnBikeMap(system.getReturnBikeMap())
+                .build();
 
     }
 }
