@@ -14,6 +14,7 @@ import org.springframework.util.ObjectUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Repository
 public class BikeSystemRepository {
@@ -124,12 +125,16 @@ public class BikeSystemRepository {
 
     /**
      * 자전거 대여 요청
-     * @param requestItem
+     * @param requestItems
      */
-    public void rent(List requestItem) {
-        int rentOfficeId = (int) requestItem.get(0);
-        int returnOfficeId = (int) requestItem.get(1);
-        int returnTime = (int) requestItem.get(2);
+    public void rent(List requestItems) {
+        int rentOfficeId = (int) requestItems.get(0);
+        int returnOfficeId = (int) requestItems.get(1);
+        int returnTime = (int) requestItems.get(2);
+
+
+        Object[] objects = requestItems.stream().filter(requestItem -> system.findRentOffice(rentOfficeId).isSatisfiedByLoadBike())
+                .toArray();
 
         RentOffice rentOffice = system.findRentOffice(rentOfficeId);
         if (rentOffice.isSatisfiedByLoadBike()) {

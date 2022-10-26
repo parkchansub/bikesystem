@@ -405,7 +405,7 @@ public class BikeSystemController {
 
 
     /**
-     *  json	설명
+     *  json 설명
      *  Key	사용자의 요청이 들어온 시각
      *  Value	해당 시각에 들어온 사용자의 요청 배열
      *  Value 배열의 각 원소	[자전거를 대여할 자전거 대여소 ID, 자전거를 반납할 자전거 대여소 ID, 자전거를 탈 시간(분)]
