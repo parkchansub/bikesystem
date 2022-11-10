@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.ObjectUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -62,22 +63,22 @@ public class BikeSystemRepository {
 
     /**
      * 시스템 대여소 정보 조회
-     * @param authorization
+     *
      * @return LocationsResponseDTO
      */
-    public LocationsResponseDTO getLocationInfo(String authorization) {
-        checkAuthCheck(authorization);
+    public LocationsResponseDTO getLocationInfo() {
+        /*checkAuthCheck(authorization);*/
         return new LocationsResponseDTO(this.system.getRentOffices());
 
     }
 
     /**
      * 시스템 트럭 정보 조회
-     * @param authorization
+     *
      * @return TruckResponseDTO
      */
-    public TruckResponseDTO getTrucksInfo(String authorization) {
-        checkAuthCheck(authorization);
+    public TruckResponseDTO getTrucksInfo() {
+        /*checkAuthCheck(authorization);*/
 
         return new TruckResponseDTO(this.system.getTrucks());
     }
@@ -128,22 +129,23 @@ public class BikeSystemRepository {
      * @param requestItems
      */
     public void rent(List requestItems) {
-        int rentOfficeId = (int) requestItems.get(0);
-        int returnOfficeId = (int) requestItems.get(1);
-        int returnTime = (int) requestItems.get(2);
+
+        requestItems.stream().forEach(o -> {
+            List item = (List) o;
+            int rentOfficeId = (int) item.get(0);
+            int returnOfficeId = (int) item.get(1);
+            int returnTime = (int) item.get(2);
+
+            RentOffice rentOffice = system.findRentOffice(rentOfficeId);
+            if (rentOffice.isSatisfiedByLoadBike()) {
+                system.rentBike(rentOffice.rentBike(returnTime, returnOfficeId));
+            } else {
+                system.updateFailRequestCnt(1);
+            }
+
+        });
 
 
-        Object[] objects = requestItems.stream().filter(requestItem -> system.findRentOffice(rentOfficeId).isSatisfiedByLoadBike())
-                .toArray();
-
-        RentOffice rentOffice = system.findRentOffice(rentOfficeId);
-        if (rentOffice.isSatisfiedByLoadBike()) {
-            Bike bike = rentOffice.rentBike(returnTime, returnOfficeId);
-            system.rentBike(bike);
-        }
-        else{
-            system.updateFailRequestCnt(1);
-        }
 
     }
 
@@ -163,9 +165,6 @@ public class BikeSystemRepository {
         return this.system;
     }
 
-    public void returnBike2(List list) {
-
-    }
 
 
     /**

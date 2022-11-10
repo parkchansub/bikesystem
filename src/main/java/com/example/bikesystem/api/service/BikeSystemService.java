@@ -28,13 +28,13 @@ public class BikeSystemService {
         return bikeSystemRepository.startBikeSystem(problemType.get());
     }
 
-    public LocationsResponseDTO getLocationInfo(String authorization) {
+    public LocationsResponseDTO getLocationInfo() {
 
-        return bikeSystemRepository.getLocationInfo(authorization);
+        return bikeSystemRepository.getLocationInfo();
     }
 
-    public TruckResponseDTO getTrucksInfo(String authorization) {
-        return bikeSystemRepository.getTrucksInfo(authorization);
+    public TruckResponseDTO getTrucksInfo() {
+        return bikeSystemRepository.getTrucksInfo();
     }
 
     public SimulateResponseDTO simulate(SimulateRequestDTO reqDto) {
@@ -44,24 +44,16 @@ public class BikeSystemService {
 
     public RentResponseDTO rent(Map<String, List> reqDto) {
 
+        reqDto.forEach((time, rentReq) -> {
+            bikeSystemRepository.returnBike(Integer.valueOf(time));
+            bikeSystemRepository.rent(rentReq);
+        });
 
-        for (String time : reqDto.keySet()) {
-            /*요청 시간*/
-            Integer requestTime = Integer.valueOf(time);
-            bikeSystemRepository.returnBike(requestTime);
-
-            /*자전거 리스트*/
-            List list = reqDto.get(time);
-            for (Object o : list) {
-
-                /*(빌리는 대여소ID, 반납하는 대여소ID, 빌리는 시간(분))*/
-                List requestItem = (List) o;
-                bikeSystemRepository.rent(requestItem);
-            }
-        }
         return RentResponseDTO.builder()
                 .system(bikeSystemRepository.getSystemInfo())
                 .build();
+
+
     }
 
 

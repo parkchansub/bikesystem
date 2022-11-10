@@ -359,7 +359,7 @@ public class BikeSystemController {
 
         String authorization = request.getHeader("authorization");
 
-        LocationsResponseDTO locationInfo = bikeSystemService.getLocationInfo(authorization);
+        LocationsResponseDTO locationInfo = bikeSystemService.getLocationInfo();
 
         return locationInfo;
     }
@@ -399,8 +399,8 @@ public class BikeSystemController {
      */
     @GetMapping("/trucks")
     public TruckResponseDTO getTrucksInfo(HttpServletRequest request, HttpServletResponse response) {
-
-        return bikeSystemService.getTrucksInfo(request.getHeader("authorization"));
+        String authorization = request.getHeader("authorization");
+        return bikeSystemService.getTrucksInfo();
     }
 
 
@@ -421,6 +421,15 @@ public class BikeSystemController {
      * @param response
      * @return
      */
+    @PostMapping("/rent")
+    public RentResponseDTO rent(@RequestBody Map<String, List> reqDto, HttpServletRequest request, HttpServletResponse response) {
+
+        return bikeSystemService.rent(reqDto);
+
+    }
+
+
+
 
 
     /**
@@ -442,13 +451,6 @@ public class BikeSystemController {
 
 
 
-
-    @PostMapping("/rent")
-    public RentResponseDTO rent(@RequestBody Map<String, List> reqDto, HttpServletRequest request, HttpServletResponse response) {
-
-        return bikeSystemService.rent(reqDto);
-
-    }
 
 
 

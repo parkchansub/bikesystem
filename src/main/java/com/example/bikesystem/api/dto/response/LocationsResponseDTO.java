@@ -15,16 +15,16 @@ public class LocationsResponseDTO {
 
     public LocationsResponseDTO(List<RentOffice> rentoffices) {
         this.locations = new ArrayList<>();
+        rentoffices.stream()
+                .forEach(rentOffice -> {
+                    this.locations.add(LocationDTO.builder()
+                            .id(rentOffice.getSeq())
+                            .located_bikes_count(rentOffice.getLocatedBikesCnt())
+                            .located_request_sucess_count(rentOffice.getRequestCount())
+                            .build());
+                });
 
-        for (RentOffice rentoffice : rentoffices) {
 
-            locations.add(LocationDTO.builder()
-                    .id(rentoffice.getSeq())
-                    .located_bikes_count(rentoffice.getLocatedBikesCnt())
-                    .located_request_sucess_count(rentoffice.getRequestCount())
-                    .build());
-
-        }
 
         this.totalRequestCnt = locations.stream().mapToInt(location -> location.getLocated_request_sucess_count()).sum();
     }
